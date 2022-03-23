@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="index.css">
+    <title>BioStacker for BioSurvival</title>
+</head>
+
+<body>
+    <div id="header" style="text-align: center;">
+        <h1>BioStacker</h1>
+        <h4>It's like MCStacker, but for one specific datapack, and it only makes armour sets</h4>
+    </div>
+
+    <div id="formArea">
+        <table id="tableDisplay">
+
+            <tr>
+                <td><label for="setName">Armour Set Name</label></td>
+                <td>
+                    <input type="text" id="setName" name="setName">
+                    <abbr
+                        title="The base name of the name of this armour set, i.e. the part that comes before the name of the piece of equipment">?</abbr>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="itemNameColour">Item Name Colour</label></td>
+                <td>
+                    <input type="color" id="itemNameColour" name="itemNameColour" value="#ffffff">
+                    <input type="text" id="itemNameColourHex" name="itemNameColourHex" value="#ffffff" size="5">
+                    <abbr title="The colour of the item names for these custom armour pieces">?</abbr>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="setBaseSet">Base Item Set</label></td>
+                <td>
+                    <select type="" id="setBaseSet" name="setBaseSet">
+                        <option value="leather">Leather</option>
+                        <option value="chainmail">Chainmail</option>
+                        <option value="iron">Iron</option>
+                        <option value="gold">Gold</option>
+                        <option value="diamond">Diamond</option>
+                        <option value="netherite">Netherite</option>
+                    </select>
+                    <abbr
+                        title="The item the custom item will use as a base. Leather will allow custom colours and Netherite will stop it from burning in lava.">?</abbr>
+                </td>
+            </tr>
+
+            <tr class="leatherCustomColour">
+                <td><label for="leatherCustomColour">Leather Armour Colour</label></td>
+                <td>
+                    <input type="color" id="leatherCustomColour" name="leatherCustomColour" value="#ffffff">
+                    <input type="text" id="leatherCustomColourHex" name="leatherCustomColourHex" value="#ffffff"
+                        size="5">
+                    <abbr title="The custom colour of leather armour.">?</abbr>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="itemDescription">Item Description</label></td>
+                <td>
+                    <textarea id="itemDescription" name="itemDescription" rows="1" cols="16" style="resize: vertical;"></textarea>
+                    <abbr
+                        title="The custom description for the item. Only accepts the raw NBT data. TODO: Make this more user friendly lol">?</abbr>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</body>
+
+</html>
