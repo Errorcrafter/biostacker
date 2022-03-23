@@ -8,6 +8,8 @@
 </head>
 
 <body>
+    <script src="src/index.js"></script>
+
     <div id="header" style="text-align: center;">
         <h1>BioStacker</h1>
         <h4>It's like MCStacker, but for one specific datapack, and it only makes armour sets</h4>
@@ -29,7 +31,7 @@
                 <td><label for="itemNameColour">Item Name Colour</label></td>
                 <td>
                     <input type="color" id="itemNameColour" name="itemNameColour" value="#ffffff">
-                    <input type="text" id="itemNameColourHex" name="itemNameColourHex" value="#ffffff" size="5">
+                    <input type="text" id="itemNameColourHex" name="itemNameColourHex" value="#ffffff" size="7">
                     <abbr title="The colour of the item names for these custom armour pieces">?</abbr>
                 </td>
             </tr>
@@ -37,7 +39,7 @@
             <tr>
                 <td><label for="setBaseSet">Base Item Set</label></td>
                 <td>
-                    <select type="" id="setBaseSet" name="setBaseSet">
+                    <select id="setBaseSet" name="setBaseSet">
                         <option value="leather">Leather</option>
                         <option value="chainmail">Chainmail</option>
                         <option value="iron">Iron</option>
@@ -50,12 +52,20 @@
                 </td>
             </tr>
 
+            <tr class="leatherCustomColourToggle">
+                <td><label for="leatherCustomColourToggle">Use Leather Armour Colour?</label></td>
+                <td>
+                    <input type="checkbox" id="leatherCustomColourToggle" name="leatherCustomColourToggle" checked="false">
+                    <abbr title="The custom colour of leather armour.">?</abbr>
+                </td>
+            </tr>
+
             <tr class="leatherCustomColour">
                 <td><label for="leatherCustomColour">Leather Armour Colour</label></td>
                 <td>
                     <input type="color" id="leatherCustomColour" name="leatherCustomColour" value="#ffffff">
                     <input type="text" id="leatherCustomColourHex" name="leatherCustomColourHex" value="#ffffff"
-                        size="5">
+                        size="7">
                     <abbr title="The custom colour of leather armour.">?</abbr>
                 </td>
             </tr>
@@ -63,7 +73,8 @@
             <tr>
                 <td><label for="itemDescription">Item Description</label></td>
                 <td>
-                    <textarea id="itemDescription" name="itemDescription" rows="1" cols="16" style="resize: vertical;"></textarea>
+                    <textarea id="itemDescription" name="itemDescription" rows="1" cols="16"
+                        style="resize: vertical;"></textarea>
                     <abbr
                         title="The custom description for the item. Only accepts the raw NBT data. TODO: Make this more user friendly lol">?</abbr>
                 </td>
