@@ -2,15 +2,17 @@ window.addEventListener("load", startup, false)
 
 // On startup
 function startup() {
-    // Create all the fields
+    // Create all the fields for stats and skills
     let statNames = ["health", "defence", "intelligence", "soul", "speed", "attack damage", "knockback resistance", "strength",
-    "fall limit", "bow damage", "base temperature", "crit chance", "crit damage", "max sanity", "heat limit", "freeze limit",
-    "lung capacity", "ferocity", "sea creature chance", "immunity", "luck"];
+        "fall limit", "bow damage", "base temperature", "crit chance", "crit damage", "max sanity", "heat limit", "freeze limit",
+        "lung capacity", "ferocity", "sea creature chance", "immunity", "luck"];
     let skillNames = ["woodwork", "mining", "fletching", "foraging", "agriculture", "fishing", "taming", "combat", "slaying",
-    "necromancy", "pyromancy", "gliding", "crafting", "climbing", "riding", "swimming", "running", "hunting", "etomology", 
-    "husbandry"];
+        "necromancy", "pyromancy", "gliding", "crafting", "climbing", "riding", "swimming", "running", "hunting", "etomology",
+        "husbandry"];
+    document.querySelector("table#tableStats").innerHTML = "";
+    document.querySelector("table#tableSkills").innerHTML = "";
     appendStatSelectors(document.querySelector("table#tableStats"), statNames, "stat");
-    appendStatSelectors(document.querySelector("table#tableSkills"), statNames, "skill");
+    appendStatSelectors(document.querySelector("table#tableSkills"), skillNames, "skill");
 
     // Init variables pointing to specific elements
     var itemNameColour = document.querySelector("input#itemNameColour");
