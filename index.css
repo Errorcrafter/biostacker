@@ -1,10 +1,26 @@
+html {
+    overflow-x: hidden;
+}
+
 label {
     display: block;
     width: 170px;
 }
 
+table#formArea {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 td.tableWrapper {
     vertical-align: top;
-    padding-left: 25px;
-    padding-right: 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+    /* padding-left: 25px; */
+    /* padding-right: 17.5px; */
+}
+
+textarea {
+    resize: vertical;
+    max-height: 125px;
 }

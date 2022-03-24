@@ -17,8 +17,8 @@
 
     <table id="formArea">
         <!-- that's right this thing uses TABLES for alignment, just like GOD intended -->
+        <!-- suck it up flexbox soys -->
         <tr>
-            <!-- suck it up flexbox soys -->
 
             <td class="tableWrapper">
                 <table id="tableDisplay">
@@ -30,7 +30,7 @@
                         </td>
                         <td>
                             <abbr
-                                title="The name of the name of this armour set, i.e. the part that comes before the name of the piece of equipment">?</abbr>
+                                title="The name of this armour set, i.e. the part that comes before the name of the piece of equipment">?</abbr>
                         </td>
                     </tr>
 
@@ -40,7 +40,7 @@
                             <input type="color" id="itemNameColour" name="itemNameColour" value="#ffffff">
                             <input type="text" id="itemNameColourHex" name="itemNameColourHex" value="#ffffff" size="7">
                         </td>
-                        <td><abbr title="The colour of the item names for these custom armour pieces">?</abbr>
+                        <td><abbr title="The colour of the item names for these custom armour pieces.">?</abbr>
                         </td>
                     </tr>
 
@@ -107,6 +107,113 @@
                     <tr>
                         <td>Loading...</td>
                     </tr>
+                </table>
+            </td>
+
+            <td class="tableWrapper">
+                <table id="tableAbilities">
+
+                    <tr>
+                        <td><label for="abil1Type">Ability 1 Type</label></td>
+                        <td>
+                            <select id="abil1Type" name="abil1Type">
+                                <option value="passive">Passive</option>
+                                <option value="equipped">Equipped</option>
+                                <option value="click">Click</option>
+                                <option value="block">Block</option>
+                                <option value="drop">Dropped</option>
+                            </select>
+                        </td>
+                        <td><abbr title="The type of ability Ability 1 will be.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="abil1Name">Ability 1 Name</label></td>
+                        <td>
+                            <input type="text" id="abil1Name" name="abil1Name">
+                        </td>
+                        <td>
+                            <abbr title="The name of this ability.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="abil1NameColour">Ability 1 Name Colour</label></td>
+                        <td>
+                            <input type="color" id="abil1NameColour" name="abil1NameColour" value="#ffffff">
+                            <input type="text" id="abil1NameColourHex" name="abil1NameColourHex" value="#ffffff"
+                                size="7">
+                        </td>
+                        <td><abbr title="The colour of the name of this ability.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="abil1Description">Ability 1 Description</label></td>
+                        <td>
+                            <textarea name="abil1Description" id="abil1Description" size="18"></textarea>
+                        </td>
+                        <td><abbr title="The description for this ability.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="enableAbil2">Enable Ability 2</label></td>
+                        <td>
+                            <input type="checkbox" id="enableAbil2" name="enableAbil2" checked="false">
+                        </td>
+                        <td><abbr title="Opens inputs for second item ability..">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tbody id="abil2Section">
+                        <tr>
+                            <td><label for="abil2Type">Ability 2 Type</label></td>
+                            <td>
+                                <select id="abil2Type" name="abil2Type">
+                                    <option value="passive">Passive</option>
+                                    <option value="equipped">Equipped</option>
+                                    <option value="click">Click</option>
+                                    <option value="block">Block</option>
+                                    <option value="drop">Dropped</option>
+                                </select>
+                            </td>
+                            <td><abbr title="The type of ability Ability 2 will be.">?</abbr>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="abil2Name">Ability 2 Name</label></td>
+                            <td>
+                                <input type="text" id="abil2Name" name="abil2Name">
+                            </td>
+                            <td>
+                                <abbr title="The name of this ability.">?</abbr>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="abil2NameColour">Ability 2 Name Colour</label></td>
+                            <td>
+                                <input type="color" id="abil2NameColour" name="abil2NameColour" value="#ffffff">
+                                <input type="text" id="abil2NameColourHex" name="abil2NameColourHex" value="#ffffff"
+                                    size="7">
+                            </td>
+                            <td><abbr title="The colour of the name of this ability.">?</abbr>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="abil2Description">Ability 2 Description</label></td>
+                            <td>
+                                <textarea name="abil2Description" id="abil2Description" size="18"></textarea>
+                            </td>
+                            <td><abbr title="The description for this ability.">?</abbr>
+                            </td>
+                        </tr>
+                    </tbody>
+
                 </table>
             </td>
 
