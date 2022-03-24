@@ -14,6 +14,8 @@ function startup() {
     var leatherColour = document.querySelector("input#leatherCustomColour");
     var leatherColourHex = document.querySelector("input#leatherCustomColourHex");
 
+    var raritySelector = document.querySelector("select#setRarity");
+
     // Init defaults
     itemNameColour.value = "#ffffff";
     itemNameColourHex.value = "#ffffff";
@@ -25,15 +27,17 @@ function startup() {
     leatherCustomColourToggleSection.style = "display: none;";
     leatherItemColourPicker.style = "display: none;";
 
-    // Create event listeners
+    raritySelector.value = "common";
+
+    // Event listeners for syncing colour inputs with hex code inputs
     itemNameColour.addEventListener("change", function () { itemNameColourHex.value = itemNameColour.value; }, false);
     itemNameColourHex.addEventListener("change", function () { itemNameColour.value = itemNameColourHex.value; }, false);
 
     baseSetDropdown.addEventListener("change", function () {
-        baseSetDropdown.value === "leather" ? leatherCustomColourToggleSection.style = "" : leatherCustomColourToggleSection.style = "display: none;"
+        baseSetDropdown.value === "leather" ? leatherCustomColourToggleSection.style = "" : leatherCustomColourToggleSection.style = "display: none;"; leatherItemColourPicker.style = "display: none;"
     });
     leatherCustomColourToggle.addEventListener("change", function () {
-        leatherCustomColourToggle.checked ? leatherItemColourPicker.style = "" : leatherItemColourPicker.style = "display: none"
+        leatherCustomColourToggle.checked ? leatherItemColourPicker.style = "" : leatherItemColourPicker.style = "display: none;"
     });
     leatherColour.addEventListener("change", function () { leatherColourHex.value = leatherColour.value; }, false);
     leatherColourHex.addEventListener("change", function () { leatherColour.value = leatherColourHex.value; }, false);

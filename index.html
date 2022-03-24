@@ -48,7 +48,7 @@
                         <option value="netherite">Netherite</option>
                     </select>
                     <abbr
-                        title="The item the custom item will use as a base. Leather will allow custom colours and Netherite will stop it from burning in lava.">?</abbr>
+                        title="The armour set the custom armour will use as a base. Leather will allow custom colours, Gold will prevent Piglin aggro and Netherite will stop it from burning in lava.">?</abbr>
                 </td>
             </tr>
 
@@ -70,13 +70,29 @@
                 </td>
             </tr>
 
-            <tr>
+            <!-- <tr>
                 <td><label for="itemDescription">Item Description</label></td>
                 <td>
                     <textarea id="itemDescription" name="itemDescription" rows="1" cols="16"
                         style="resize: vertical;"></textarea>
                     <abbr
                         title="The custom description for the item. Only accepts the raw NBT data. TODO: Make this more user friendly lol">?</abbr>
+                </td>
+            </tr> -->
+
+            <tr>
+                <td><label for="setRarity">Armour Set Rarity</label></td>
+                <td>
+                    <select id="setRarity" name="setRarity">
+                        <option value="common">Common</option>
+                        <option value="uncommon">Uncommon</option>
+                        <option value="rare">Rare</option>
+                        <option value="epic">Epic</option>
+                        <option value="legendary">Legendary</option>
+                        <option value="mythical">Mythical</option>
+                    </select>
+                    <abbr
+                        title="The rarity of this armour set.">?</abbr>
                 </td>
             </tr>
 
