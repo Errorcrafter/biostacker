@@ -27,6 +27,8 @@
                         <td><label for="setName">Armour Set Name</label></td>
                         <td>
                             <input type="text" id="setName" name="setName">
+                        </td>
+                        <td>
                             <abbr
                                 title="The name of the name of this armour set, i.e. the part that comes before the name of the piece of equipment">?</abbr>
                         </td>
@@ -37,7 +39,8 @@
                         <td>
                             <input type="color" id="itemNameColour" name="itemNameColour" value="#ffffff">
                             <input type="text" id="itemNameColourHex" name="itemNameColourHex" value="#ffffff" size="7">
-                            <abbr title="The colour of the item names for these custom armour pieces">?</abbr>
+                        </td>
+                        <td><abbr title="The colour of the item names for these custom armour pieces">?</abbr>
                         </td>
                     </tr>
 
@@ -52,6 +55,8 @@
                                 <option value="diamond">Diamond</option>
                                 <option value="netherite">Netherite</option>
                             </select>
+                        </td>
+                        <td>
                             <abbr
                                 title="The armour set the custom armour will use as a base. Leather will allow custom colours, Gold will prevent Piglin aggro and Netherite will stop it from burning in lava.">?</abbr>
                         </td>
@@ -62,7 +67,8 @@
                         <td>
                             <input type="checkbox" id="leatherCustomColourToggle" name="leatherCustomColourToggle"
                                 checked="false">
-                            <abbr title="The custom colour of leather armour.">?</abbr>
+                        </td>
+                        <td><abbr title="The custom colour of leather armour.">?</abbr>
                         </td>
                     </tr>
 
@@ -72,7 +78,8 @@
                             <input type="color" id="leatherCustomColour" name="leatherCustomColour" value="#ffffff">
                             <input type="text" id="leatherCustomColourHex" name="leatherCustomColourHex" value="#ffffff"
                                 size="7">
-                            <abbr title="The custom colour of leather armour.">?</abbr>
+                        </td>
+                        <td><abbr title="The custom colour of leather armour.">?</abbr>
                         </td>
                     </tr>
 
@@ -87,7 +94,8 @@
                                 <option value="legendary">Legendary</option>
                                 <option value="mythical">Mythical</option>
                             </select>
-                            <abbr title="The rarity of this armour set.">?</abbr>
+                        </td>
+                        <td><abbr title="The rarity of this armour set.">?</abbr>
                         </td>
                     </tr>
 
@@ -96,13 +104,17 @@
 
             <td class="tableWrapper">
                 <table id="tableStats">
-                    <tr><td>Loading...</td></tr>
+                    <tr>
+                        <td>Loading...</td>
+                    </tr>
                 </table>
             </td>
 
             <td class="tableWrapper">
                 <table id="tableSkills">
-                    <tr><td>Loading...</td></tr>
+                    <tr>
+                        <td>Loading...</td>
+                    </tr>
                 </table>
             </td>
 

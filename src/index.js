@@ -66,8 +66,10 @@ function appendStatSelectors(parent, names, mode) {
 <td><label for="${tagName}">${displayName}${mode === "skill" ? " XP Bonus" : ""}</label></td>
 <td>
     <input type="number" id="${tagName}" name="${tagName}" value="0">
-    <abbr
-        title="The ${mode === "stat" ? name : displayName}${mode === "skill" ? " Skill XP" : ""} increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% for the boots and helmet.">?</abbr>
+</td>
+<td>
+        <abbr
+            title="The ${mode === "stat" ? name : displayName}${mode === "skill" ? " Skill XP" : ""} increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% for the boots and helmet.">?</abbr>
 </td>
 `;
         frag.appendChild(row);
