@@ -15,89 +15,280 @@
         <h4>It's like MCStacker, but for one specific datapack, and it only makes armour sets</h4>
     </div>
 
-    <div id="formArea">
-        <table id="tableDisplay">
+    <table id="formArea"> <!-- that's right this thing uses TABLES for alignment, just like GOD intended -->
+        <tr>              <!-- suck it up flexbox soys -->
 
-            <tr>
-                <td><label for="setName">Armour Set Name</label></td>
-                <td>
-                    <input type="text" id="setName" name="setName">
-                    <abbr
-                        title="The base name of the name of this armour set, i.e. the part that comes before the name of the piece of equipment">?</abbr>
-                </td>
-            </tr>
+            <td>
+                <table id="tableDisplay">
 
-            <tr>
-                <td><label for="itemNameColour">Item Name Colour</label></td>
-                <td>
-                    <input type="color" id="itemNameColour" name="itemNameColour" value="#ffffff">
-                    <input type="text" id="itemNameColourHex" name="itemNameColourHex" value="#ffffff" size="7">
-                    <abbr title="The colour of the item names for these custom armour pieces">?</abbr>
-                </td>
-            </tr>
+                    <tr>
+                        <td><label for="setName">Armour Set Name</label></td>
+                        <td>
+                            <input type="text" id="setName" name="setName">
+                            <abbr
+                                title="The name of the name of this armour set, i.e. the part that comes before the name of the piece of equipment">?</abbr>
+                        </td>
+                    </tr>
 
-            <tr>
-                <td><label for="setBaseSet">Base Item Set</label></td>
-                <td>
-                    <select id="setBaseSet" name="setBaseSet">
-                        <option value="leather">Leather</option>
-                        <option value="chainmail">Chainmail</option>
-                        <option value="iron">Iron</option>
-                        <option value="gold">Gold</option>
-                        <option value="diamond">Diamond</option>
-                        <option value="netherite">Netherite</option>
-                    </select>
-                    <abbr
-                        title="The armour set the custom armour will use as a base. Leather will allow custom colours, Gold will prevent Piglin aggro and Netherite will stop it from burning in lava.">?</abbr>
-                </td>
-            </tr>
+                    <tr>
+                        <td><label for="itemNameColour">Item Name Colour</label></td>
+                        <td>
+                            <input type="color" id="itemNameColour" name="itemNameColour" value="#ffffff">
+                            <input type="text" id="itemNameColourHex" name="itemNameColourHex" value="#ffffff" size="7">
+                            <abbr title="The colour of the item names for these custom armour pieces">?</abbr>
+                        </td>
+                    </tr>
 
-            <tr class="leatherCustomColourToggle">
-                <td><label for="leatherCustomColourToggle">Use Leather Armour Colour?</label></td>
-                <td>
-                    <input type="checkbox" id="leatherCustomColourToggle" name="leatherCustomColourToggle" checked="false">
-                    <abbr title="The custom colour of leather armour.">?</abbr>
-                </td>
-            </tr>
+                    <tr>
+                        <td><label for="setBaseSet">Base Item Set</label></td>
+                        <td>
+                            <select id="setBaseSet" name="setBaseSet">
+                                <option value="leather">Leather</option>
+                                <option value="chainmail">Chainmail</option>
+                                <option value="iron">Iron</option>
+                                <option value="gold">Gold</option>
+                                <option value="diamond">Diamond</option>
+                                <option value="netherite">Netherite</option>
+                            </select>
+                            <abbr
+                                title="The armour set the custom armour will use as a base. Leather will allow custom colours, Gold will prevent Piglin aggro and Netherite will stop it from burning in lava.">?</abbr>
+                        </td>
+                    </tr>
 
-            <tr class="leatherCustomColour">
-                <td><label for="leatherCustomColour">Leather Armour Colour</label></td>
-                <td>
-                    <input type="color" id="leatherCustomColour" name="leatherCustomColour" value="#ffffff">
-                    <input type="text" id="leatherCustomColourHex" name="leatherCustomColourHex" value="#ffffff"
-                        size="7">
-                    <abbr title="The custom colour of leather armour.">?</abbr>
-                </td>
-            </tr>
+                    <tr class="leatherCustomColourToggle">
+                        <td><label for="leatherCustomColourToggle">Use Leather Armour Colour?</label></td>
+                        <td>
+                            <input type="checkbox" id="leatherCustomColourToggle" name="leatherCustomColourToggle"
+                                checked="false">
+                            <abbr title="The custom colour of leather armour.">?</abbr>
+                        </td>
+                    </tr>
 
-            <!-- <tr>
-                <td><label for="itemDescription">Item Description</label></td>
-                <td>
-                    <textarea id="itemDescription" name="itemDescription" rows="1" cols="16"
-                        style="resize: vertical;"></textarea>
-                    <abbr
-                        title="The custom description for the item. Only accepts the raw NBT data. TODO: Make this more user friendly lol">?</abbr>
-                </td>
-            </tr> -->
+                    <tr class="leatherCustomColour">
+                        <td><label for="leatherCustomColour">Leather Armour Colour</label></td>
+                        <td>
+                            <input type="color" id="leatherCustomColour" name="leatherCustomColour" value="#ffffff">
+                            <input type="text" id="leatherCustomColourHex" name="leatherCustomColourHex" value="#ffffff"
+                                size="7">
+                            <abbr title="The custom colour of leather armour.">?</abbr>
+                        </td>
+                    </tr>
 
-            <tr>
-                <td><label for="setRarity">Armour Set Rarity</label></td>
-                <td>
-                    <select id="setRarity" name="setRarity">
-                        <option value="common">Common</option>
-                        <option value="uncommon">Uncommon</option>
-                        <option value="rare">Rare</option>
-                        <option value="epic">Epic</option>
-                        <option value="legendary">Legendary</option>
-                        <option value="mythical">Mythical</option>
-                    </select>
-                    <abbr
-                        title="The rarity of this armour set.">?</abbr>
-                </td>
-            </tr>
+                    <tr>
+                        <td><label for="setRarity">Armour Set Rarity</label></td>
+                        <td>
+                            <select id="setRarity" name="setRarity">
+                                <option value="common">Common</option>
+                                <option value="uncommon">Uncommon</option>
+                                <option value="rare">Rare</option>
+                                <option value="epic">Epic</option>
+                                <option value="legendary">Legendary</option>
+                                <option value="mythical">Mythical</option>
+                            </select>
+                            <abbr title="The rarity of this armour set.">?</abbr>
+                        </td>
+                    </tr>
 
-        </table>
-    </div>
+                </table>
+            </td>
+
+            <td>
+                <table id="tableStats">
+
+                    <tr>
+                        <td><label for="health">Health</label></td>
+                        <td>
+                            <input type="number" id="health" name="health">
+                            <abbr
+                                title="The health this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="defense">Defense</label></td>
+                        <td>
+                            <input type="number" id="defense" name="defense">
+                            <abbr
+                                title="The defense this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="iq">Intelligence</label></td>
+                        <td>
+                            <input type="number" id="iq" name="iq">
+                            <abbr
+                                title="The intelligence this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="soul">Soul</label></td>
+                        <td>
+                            <input type="number" id="soul" name="soul">
+                            <abbr
+                                title="The soul this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="speed">Speed</label></td>
+                        <td>
+                            <input type="number" id="speed" name="speed">
+                            <abbr
+                                title="The speed this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="atkDmg">Attack Damage</label></td>
+                        <td>
+                            <input type="number" id="atkDmg" name="atkDmg">
+                            <abbr
+                                title="The attack damage increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="antiKB">Knockback Resistance</label></td>
+                        <td>
+                            <input type="number" id="antiKB" name="antiKB">
+                            <abbr
+                                title="The knockback resistance this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="strength">Strength</label></td>
+                        <td>
+                            <input type="number" id="strength" name="strength">
+                            <abbr
+                                title="The strength this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="fallLimit">Fall Limit</label></td>
+                        <td>
+                            <input type="number" id="fallLimit" name="fallLimit">
+                            <abbr
+                                title="The fall limit increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="bowDmg">Bow Damage</label></td>
+                        <td>
+                            <input type="number" id="bowDmg" name="bowDmg">
+                            <abbr
+                                title="The bow damage increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="baseTemp">Base Temperature</label></td>
+                        <td>
+                            <input type="number" id="baseTemp" name="baseTemp">
+                            <abbr
+                                title="The base temperature increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="critChance">Crit Chance</label></td>
+                        <td>
+                            <input type="number" id="critChance" name="critChance">
+                            <abbr
+                                title="The critical hit chance increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="critDmg">Crit Damage</label></td>
+                        <td>
+                            <input type="number" id="critDmg" name="critDmg">
+                            <abbr
+                                title="The critical hit damage increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="sanity">Max Sanity</label></td>
+                        <td>
+                            <input type="number" id="sanity" name="sanity">
+                            <abbr
+                                title="The max sanity increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="heatLim">Heat Limit</label></td>
+                        <td>
+                            <input type="number" id="heatLim" name="heatLim">
+                            <abbr
+                                title="The heat limit increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="freezeLim">Freeze Limit</label></td>
+                        <td>
+                            <input type="number" id="freezeLim" name="freezeLim">
+                            <abbr
+                                title="The freeze limit increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="lungCapac">Lung Capacity</label></td>
+                        <td>
+                            <input type="number" id="lungCapac" name="lungCapac">
+                            <abbr
+                                title="The lung capacity increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="ferocity">Ferocity</label></td>
+                        <td>
+                            <input type="number" id="ferocity" name="ferocity">
+                            <abbr
+                                title="The ferocity this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="seaChance">Sea Creature Chance</label></td>
+                        <td>
+                            <input type="number" id="seaChance" name="seaChance">
+                            <abbr
+                                title="The sea creature chance increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="immunity">Immunity</label></td>
+                        <td>
+                            <input type="number" id="immunity" name="immunity">
+                            <abbr
+                                title="The immunity this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="luck">Luck</label></td>
+                        <td>
+                            <input type="number" id="luck" name="luck">
+                            <abbr
+                                title="The luck increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% of the boots and helmet.">?</abbr>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+
+        </tr>
+    </table>
 </body>
 
 </html>
