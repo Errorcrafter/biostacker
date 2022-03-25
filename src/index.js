@@ -20,8 +20,6 @@ function startup() {
 
     var baseSetDropdown = document.querySelector("select#setBaseSet");
 
-    var leatherCustomColourToggleSection = document.querySelector("tr.leatherCustomColourToggle");
-    var leatherCustomColourToggle = document.querySelector("input#leatherCustomColourToggle");
     var leatherItemColourPicker = document.querySelector("tr.leatherCustomColour");
     var leatherColour = document.querySelector("input#leatherCustomColour");
     var leatherColourHex = document.querySelector("input#leatherCustomColourHex");
@@ -46,14 +44,12 @@ function startup() {
 
     baseSetDropdown.value = "iron";
     raritySelector.value = "common";
-    leatherCustomColourToggle.checked = false;
     document.querySelector("select#abil1Type").value = "click";
     document.querySelector("select#abil2Type").value = "click";
     enableAbil2.checked = false;
     document.querySelector("textarea#abil1Description").value = "";
     document.querySelector("textarea#abil2Description").value = "";
     
-    leatherCustomColourToggleSection.style = "display: none;";
     leatherItemColourPicker.style = "display: none;";
     document.querySelector("tbody#abil2Section").style = "display: none;";
 
@@ -62,10 +58,7 @@ function startup() {
     itemNameColourHex.addEventListener("input", function () { itemNameColour.value = itemNameColourHex.value; }, false);
 
     baseSetDropdown.addEventListener("input", function () {
-        baseSetDropdown.value === "leather" ? leatherCustomColourToggleSection.style = "" : leatherCustomColourToggleSection.style = "display: none;"; leatherItemColourPicker.style = "display: none;"
-    });
-    leatherCustomColourToggle.addEventListener("input", function () {
-        leatherCustomColourToggle.checked ? leatherItemColourPicker.style = "" : leatherItemColourPicker.style = "display: none;"
+        baseSetDropdown.value === "leather" ? leatherItemColourPicker.style = "" : leatherItemColourPicker.style = "display: none;"
     });
     leatherColour.addEventListener("input", function () { leatherColourHex.value = leatherColour.value; }, false);
     leatherColourHex.addEventListener("input", function () { leatherColour.value = leatherColourHex.value; }, false);
@@ -74,7 +67,6 @@ function startup() {
     abil1NameColourHex.addEventListener("input", function () { abil1NameColour.value = abil1NameColourHex.value; }, false);
 
     enableAbil2.addEventListener("input", function () {
-        console.log("a "+enableAbil2.checked)
         enableAbil2.checked ? document.querySelector("tbody#abil2Section").style = "" : document.querySelector("tbody#abil2Section").style = "display: none;"
     });
     abil2NameColour.addEventListener("input", function () { abil2NameColourHex.value = abil2NameColour.value; }, false);

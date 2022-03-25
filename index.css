@@ -1,26 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Consolas&display=swap');
+
+:root {
+    --red: #e63535;
+    --red-light: #d44545;
+    --bg: #0f0f0f;
+    --bg-light: #202020;
+}
+
 html {
-    overflow-x: hidden;
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    background-color: var(--bg);
+    color: white;
+    font-family: "Consolas", monospace;
+    font-size: 15px;
+}
+
+h1 {
+    color: var(--red);
+    margin: 10px;
+}
+
+h4 {
+    margin: 10px;
+    text-emphasis: none;
+    text-decoration: solid;
 }
 
 label {
+    color: var(--red);
     display: block;
-    width: 170px;
 }
 
 table#formArea {
     margin-left: auto;
     margin-right: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+td.tableWrapper > table {
+    border-spacing: 6px 2.5px;
 }
 
 td.tableWrapper {
     vertical-align: top;
     padding-left: 10px;
     padding-right: 10px;
-    /* padding-left: 25px; */
-    /* padding-right: 17.5px; */
+}
+
+input, select, select:active {
+    color: white;
+    font-family: "Consolas", monospace;
+    border-color: var(--red-light);
+    border-radius: 5px;
+    background-color: var(--bg-light);
+    width: 75px;
+}
+
+input[type="text"][size] {
+    width: unset;
+}
+
+input[type="color"] {
+    width: 30px;
+    margin-right: -5px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 textarea {
     resize: vertical;
+    max-height: 125px;
+    color: white;
+    font-family: "Consolas", monospace;
+    border-color: var(--red-light);
+    background-color: var(--bg-light);
+    font-size: 12.5px;
+}
+
+textarea.output {
+    resize: none;
     max-height: 125px;
 }
