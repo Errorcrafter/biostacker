@@ -26,9 +26,42 @@
                 <table id="tableDisplay">
 
                     <tr>
-                        <td><label for="setName">Armour Set Name</label></td>
+                        <td><label for="itemType">Item Type</label></td>
+                        <td>
+                            <select id="itemType" name="itemType">
+                                <option value="tool">Tool</option>
+                                <option value="weapon">Weapon</option>
+                                <option value="armour">Armour</option>
+                                <option value="pet">Inventory Pet</option>
+                                <option value="accessory">Accessory</option>
+                                <option value="food">Food</option>
+                                <option value="plant">Plant</option>
+                                <option value="ore">Ore</option>
+                                <option value="mineral">Mineral</option>
+                                <option value="fungus">Fungus</option>
+                                <option value="brewing">Brewing Ingredient</option>
+                            </select>
+                        </td>
+                        <td>
+                            <abbr title="Set the item type of this item.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr class="nonArmourSetSpecific">
+                        <td><label for="setName">Item Name</label></td>
                         <td>
                             <input type="text" id="setName" name="setName">
+                        </td>
+                        <td>
+                            <abbr
+                                title="The custom name of this item.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr class="armourSetSpecific">
+                        <td><label for="setArmourName">Armour Set Name</label></td>
+                        <td>
+                            <input type="text" id="setArmourName" name="setArmourName">
                         </td>
                         <td>
                             <abbr
@@ -46,7 +79,18 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr class="nonArmourSetSpecific">
+                        <td><label for="setBaseItem">Item Name</label></td>
+                        <td>
+                            <input type="text" id="setBaseItem" name="setBaseItem">
+                        </td>
+                        <td>
+                            <abbr
+                                title="The item the custom item will use as a base.">?</abbr>
+                        </td>
+                    </tr>
+
+                    <tr class="armourSetSpecific">
                         <td><label for="setBaseSet">Base Item Set</label></td>
                         <td>
                             <select id="setBaseSet" name="setBaseSet">
@@ -64,7 +108,7 @@
                         </td>
                     </tr>
 
-                    <tr class="leatherCustomColour">
+                    <tr class="leatherCustomColour armourSetSpecific">
                         <td><label for="leatherCustomColour">Leather Armour Colour</label></td>
                         <td>
                             <input type="color" id="leatherCustomColour" name="leatherCustomColour" value="#ffffff">
@@ -109,6 +153,7 @@
                         <td><label for="abil1Type">Ability 1 Type</label></td>
                         <td>
                             <select id="abil1Type" name="abil1Type">
+                                <option value="unset">Unset</option>
                                 <option value="passive">Passive</option>
                                 <option value="equipped">Equipped</option>
                                 <option value="click">Click</option>
@@ -150,20 +195,12 @@
                         </td>
                     </tr>
 
-                    <tr>
-                        <td><label for="enableAbil2">Enable Ability 2</label></td>
-                        <td style="text-align: left;">
-                            <input type="checkbox" id="enableAbil2" name="enableAbil2" checked="false">
-                        </td>
-                        <td><abbr title="Opens inputs for second item ability..">?</abbr>
-                        </td>
-                    </tr>
-
                     <tbody id="abil2Section">
                         <tr>
                             <td><label for="abil2Type">Ability 2 Type</label></td>
                             <td>
                                 <select id="abil2Type" name="abil2Type">
+                                    <option value="unset">Unset</option>
                                     <option value="passive">Passive</option>
                                     <option value="equipped">Equipped</option>
                                     <option value="click">Click</option>

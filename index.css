@@ -58,7 +58,7 @@ input, select {
     border-color: var(--red-light);
     border-radius: 5px;
     background-color: var(--bg-light);
-    width: 75px;
+    width: 85px;
 }
 
 button {
