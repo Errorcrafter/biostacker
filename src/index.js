@@ -49,7 +49,7 @@ function startup() {
     enableAbil2.checked = false;
     document.querySelector("textarea#abil1Description").value = "";
     document.querySelector("textarea#abil2Description").value = "";
-    
+
     leatherItemColourPicker.style = "display: none;";
     document.querySelector("tbody#abil2Section").style = "display: none;";
 
@@ -71,6 +71,24 @@ function startup() {
     });
     abil2NameColour.addEventListener("input", function () { abil2NameColourHex.value = abil2NameColour.value; }, false);
     abil2NameColourHex.addEventListener("input", function () { abil2NameColour.value = abil2NameColourHex.value; }, false);
+
+    console.log("ri");
+    // Generate modal shitfuckery
+    var generateBtn = document.querySelector("button");
+    var outputBG = document.querySelector("div.outputBG");
+    var outpuModal = document.querySelector("div.output");
+
+    // shows the output modal when the generate buton gets clicked
+    generateBtn.onclick = function () {
+        outputBG.style = "display: block;";
+    }
+
+    // closes the modal when clicking elsewhere
+    window.onclick = function (event) {
+        if (event.target == outputBG) {
+            outputBG.style.display = "none";
+        }
+    }
 }
 
 function appendStatSelectors(parent, names, mode) {

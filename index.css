@@ -25,7 +25,7 @@ h1 {
 }
 
 h4 {
-    margin: 10px;
+    margin: 5px;
     text-emphasis: none;
     text-decoration: solid;
 }
@@ -52,13 +52,21 @@ td.tableWrapper {
     padding-right: 10px;
 }
 
-input, select, select:active {
+input, select {
     color: white;
     font-family: "Consolas", monospace;
     border-color: var(--red-light);
     border-radius: 5px;
     background-color: var(--bg-light);
     width: 75px;
+}
+
+button {
+    color: white;
+    font-family: "Consolas", monospace;
+    border-color: var(--red-light);
+    border-radius: 5px;
+    background-color: var(--bg-light);
 }
 
 input[type="text"][size] {
@@ -86,8 +94,36 @@ textarea {
     color: white;
     font-family: "Consolas", monospace;
     border-color: var(--red-light);
+    border-radius: 5px;
     background-color: var(--bg-light);
     font-size: 12.5px;
+}
+
+div.outputBG{
+    display: none;
+    position: fixed;
+    z-index: 9;
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: #202020aa; /* Black w/ opacity */
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+div.output {
+    position: fixed;
+    bottom: 0;
+    background-color: var(--bg-light);
+    border: 2.5px;
+    border-style: solid solid none solid;
+    border-radius: 5px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-color: var(--red);
+    width: 95%;
+    padding: 10px;
 }
 
 textarea.output {
