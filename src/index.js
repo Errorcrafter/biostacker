@@ -3,12 +3,29 @@ window.addEventListener("load", startup, false)
 // On startup
 function startup() {
     // Create all the fields for stats and skills
-    let statNames = ["health", "defence", "intelligence", "soul", "speed", "attack damage", "knockback resistance", "strength",
-        "fall limit", "bow damage", "base temperature", "crit chance", "crit damage", "max sanity", "heat limit", "freeze limit",
-        "lung capacity", "ferocity", "sea creature chance", "immunity", "luck"];
-    let skillNames = ["woodwork", "mining", "fletching", "foraging", "agriculture", "fishing", "taming", "combat", "slaying",
-        "necromancy", "pyromancy", "gliding", "crafting", "climbing", "riding", "swimming", "running", "hunting", "etomology",
-        "husbandry"];
+    let statNames = [
+        new Field("health", "FF7088", "❤", 10), new Field("defence", "CF967E", "❈", 1),
+        new Field("intelligence", "6DBFA7", "❂", 1), new Field("soul", "B6B4C4", "❂", 1), new Field("speed", "EDC25F", "➹", 1),
+        new Field("attack damage", "C75D76", "🗡"), new Field("knockback resistance", "DEAF68", "☗", 1),
+        new Field("strength", "C45252", "🪓", 10), new Field("fall limit", "D4C4B6", "☁", 1),
+        new Field("bow damage", "C1D7E0", "🏹", 1), new Field("base temperature", "DEAF68", "☀", 10000),
+        new Field("crit chance", "8BBBC9", "✧", 1), new Field("crit damage", "C8B0CF", "✦", 1),
+        new Field("max sanity", "BAB6A2", "☻", 1), new Field("heat limit", "DB9B76", "❄", 10000),
+        new Field("freeze limit", "ADE3DA", "❆", 10000), new Field("lung capacity", "B0CFB9", "⌛", 1),
+        new Field("ferocity", "E8864D", "☄", 1), new Field("sea creature chance", "00AAAA", "🎣", 1),
+        new Field("immunity", "C5DB6B", "☠", 1), new Field("luck", "4FDB7E", "❉", 1)
+    ]
+    let skillNames = [
+        new Field("woodwork", "FFFFFF", "x", 1), new Field("mining", "FFFFFF", "x", 1),
+        new Field("foraging", "FFFFFF", "x", 1), new Field("agriculture", "FFFFFF", "x", 1),
+        new Field("fishing", "FFFFFF", "x", 1), new Field("attack taming", "FFFFFF", "x"),
+        new Field("combat", "FFFFFF", "x", 1), new Field("slaying", "FFFFFF", "x", 1),
+        new Field("necromancy", "FFFFFF", "x", 1), new Field("gliding", "FFFFFF", "x", 1),
+        new Field("crafting", "FFFFFF", "x", 1), new Field("climbing", "FFFFFF", "x", 1),
+        new Field("riding", "FFFFFF", "x", 1), new Field("swimming", "FFFFFF", "x", 1), new Field("running", "FFFFFF", "x", 1),
+        new Field("hunting", "FFFFFF", "x", 1), new Field("etomology", "FFFFFF", "x", 1),
+        new Field("husbandry", "FFFFFF", "x", 1),
+    ]
     document.querySelector("table#tableStats").innerHTML = "";
     document.querySelector("table#tableSkills").innerHTML = "";
     appendStatSelectors(document.querySelector("table#tableStats"), statNames, "stat");
@@ -91,21 +108,22 @@ function startup() {
     }
 }
 
-function appendStatSelectors(parent, names, mode) {
+function appendStatSelectors(parent, fields, mode) {
     if (mode != "stat" && mode != "skill") { return null; }
     let frag = new DocumentFragment();
-    names.forEach(name => {
+    fields.forEach(field => {
         let row = document.createElement("tr");
-        let displayName = capitalise(name.toLowerCase());
-        let tagName = camelCase(name.toLowerCase());
+        let displayName = capitalise(field.name.toLowerCase());
+        let tagName = camelCase(field.name.toLowerCase());
         row.innerHTML = `
-<td><label for="${tagName}">${displayName}${mode === "skill" ? " XP Bonus" : ""}</label></td>
+<td><label for="${tagName}" style="color: #${field.colour.length === 6? field.colour : "ffffff"};">${displayName}${mode === "skill" ? " XP Bonus" : ""}</label></td>
+<td><p style="text-align: center; color: #${field.colour.length === 6? field.colour : "ffffff"}; margin: 0px;">${field.symbol}</p></td>
 <td>
-    <input type="number" id="${tagName}" name="${tagName}" value="0">
+    <input type="number" id="${tagName}" name="${tagName}" value="0${field.scale > 1? "."+"0".repeat(Math.log10(field.scale)) : ""}" step="${field.scale != undefined? 1/field.scale : 1}">
 </td>
 <td>
         <abbr
-            title="The ${mode === "stat" ? name : displayName}${mode === "skill" ? " Skill XP" : ""} increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% for the boots and helmet.">?</abbr>
+            title="The ${mode === "stat" ? field.name : displayName}${mode === "skill" ? " Skill XP" : ""} increase this armour set gives. 100% of this value will be applied to the chestplate, 75% for the leggings and 50% for the boots and helmet.">?</abbr>
 </td>
 `;
         frag.appendChild(row);
