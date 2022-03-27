@@ -5,11 +5,12 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="index.css">
     <title>BioStacker for BioSurvival</title>
+    
+    <script src="src/fieldHelper.js" defer></script>
+    <script src="src/index.js" defer></script>
 </head>
 
 <body>
-    <script src="src/index.js"></script>
-    <script src="src/fieldHelper.js"></script>
 
     <div id="header" style="text-align: center;">
         <h1>BioStacker</h1>
@@ -29,17 +30,19 @@
                         <td><label for="itemType">Item Type</label></td>
                         <td>
                             <select id="itemType" name="itemType">
+                                <option value="accessory">Accessory</option>
+                                <option value="armour">Armour</option>
+                                <option value="brewing">Brewing Ingredient</option>
+                                <option value="food">Food</option>
+                                <option value="fungus">Fungus</option>
+                                <option value="pet">Inventory Pet</option>
+                                <option value="material">Material</option>
+                                <option value="mineral">Mineral</option>
+                                <option value="drop">Mob Drop</option>
+                                <option value="ore">Ore</option>
+                                <option value="plant">Plant</option>
                                 <option value="tool">Tool</option>
                                 <option value="weapon">Weapon</option>
-                                <option value="armour">Armour</option>
-                                <option value="pet">Inventory Pet</option>
-                                <option value="accessory">Accessory</option>
-                                <option value="food">Food</option>
-                                <option value="plant">Plant</option>
-                                <option value="ore">Ore</option>
-                                <option value="mineral">Mineral</option>
-                                <option value="fungus">Fungus</option>
-                                <option value="brewing">Brewing Ingredient</option>
                             </select>
                         </td>
                         <td>
