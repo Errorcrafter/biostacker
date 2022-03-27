@@ -21,7 +21,7 @@ let skillNames = [
     new Field("combat", "738CD1", "", 100), new Field("slaying", "FFFFFF", "", 100),
     new Field("necromancy", "886599", "", 100), new Field("gliding", "9FA2D6", "", 100),
     new Field("crafting", "D6A87A", "", 100), new Field("climbing", "B1E0C3", "", 100),
-    new Field("riding", "FFFFFF", "", 100), new Field("swimming", "48A9BD", "", 100), new Field("running", "FFFFFF", "", 100),
+    new Field("swimming", "48A9BD", "", 100), 
     new Field("hunting", "FF5555", "", 100), new Field("etomology", "FFFF55", "", 100),
     new Field("husbandry", "FF7083", "", 100), new Field("treasury", "F5A74E", "", 100),
 ]
@@ -122,7 +122,7 @@ function startup() {
     // shows the output modal when the generate buton gets clicked
     generateBtn.onclick = function () {
         outputBG.style = "display: block;";
-        console.log(generateGiveCode(document.querySelector("input#setName").value, statNames, skillNames, 1));
+        console.log(generateGiveCode(document.querySelector("input#setName").value, 1));
     }
 
     // closes the modal when clicking elsewhere
@@ -133,8 +133,8 @@ function startup() {
     }
 }
 
-function generateGiveCode(baseItem, stats, skills, scale = 1) {
-    var gc = `/give @s ${baseItem}{display:{Name:'{"text":"`;
+function generateGiveCode(baseItem, scale = 1) {
+    var gc = `/give @s ${document.querySelector("input#setBaseItem").value}{display:{Name:'{"text":"`;
 
     if (itemType.value != "armour") {
         gc += (document.querySelector("input#setName").value != "" ? document.querySelector("input#setName").value : capitalise(baseItem));
@@ -143,9 +143,9 @@ function generateGiveCode(baseItem, stats, skills, scale = 1) {
         gc += document.querySelector("input#setArmourName").value;
 
         if (baseItem.includes("helmet") || baseItem.includes("cap")) gc += " Helmet";
-        else if (baseItem.includes("chestplate") || baseItem.includes("tunic")) gc += " Chestplate";
-        else if (baseItem.includes("leggings") || baseItem.includes("pants")) gc += " Leggings";
-        else if (baseItem.includes("boots")) gc += " Boots";
+        else if (baseItem.includes("chestplate") || baseItem.includes("tunic")) gc += " Chest Piece";
+        else if (baseItem.includes("leggings") || baseItem.includes("pants")) gc += " Leg Piece";
+        else if (baseItem.includes("boots")) gc += " Footwear";
         else gc += " Armour"; // edge case, hopefully this won't ever trigger
     }
 
@@ -161,9 +161,9 @@ function generateGiveCode(baseItem, stats, skills, scale = 1) {
     else gc += "⸎UNOBTAINABLE⸎"; // edge case again
 
     gc += ` ${capitalise(itemType.value)}","color":"#`;
-    if (itemType.value == "tool") gc += "";
+    if (itemType.value == "tool") gc += "FFFFFF";
     else if (itemType.value == "accessory") gc += "FFE180";
-    else if (itemType.value == "armour") gc += "FFFFFF";
+    else if (itemType.value == "armour") gc += "E3B36B";
     else if (itemType.value == "brewing") gc += "D975A";
     else if (itemType.value == "food") gc += "E38891";
     else if (itemType.value == "fungus") gc += "E6DC9C";
@@ -175,7 +175,7 @@ function generateGiveCode(baseItem, stats, skills, scale = 1) {
     else if (itemType.value == "plant") gc += "B3D66D";
     else if (itemType.value == "tool") gc += "B4C6DB";
     else if (itemType.value == "weapon") gc += "7893DE";
-    else gc += "Item"; // edge case yet again
+    else gc += "FFFFFF"; // edge case yet again
     gc += `","italic":${raritySelector.value == "mythical".toString()}}',`;
 
     // awful section to generate the rest of the lore, TODO: make this less shit
@@ -184,18 +184,58 @@ function generateGiveCode(baseItem, stats, skills, scale = 1) {
         var input = document.querySelector("input#" + camelCase(field.name));
         console.log(input);
         var l = `'[{"text":"`;
-        if (input.value != 0 && typeof input.value === "number") {
-            l += (input.value > 0) + (input.value * field.scale).toString();
-            l += `${field.name.includes("crit") || field.name.includes("chance") ? "" : " "}","name","#`;
-            if (field.name.includes("heat") || field.name.includes("freeze") || field.name.includes("temperature")) l += (input.value > 0 ? "e5934f" : "81c4c0");
-            else l += (input.value > 0 ? "8481B5" : "D65A77");
-            l += `","italic":false},{"text":"${capitalise(field.name)} ${field.symbol}","color":"#${field.colour}","italic":false}]'`;
-
-            loreList.push(l)
+        if (parseInt(input.value) != 0) {
+            l += (parseInt(input.value) > 0 ? "+" : "") + parseInt(input.value).toString();
+            l += `${field.name.includes("crit") || field.name.includes("chance") ? "" : " "}","color":"#`;
+            if (field.name.includes("temperature")) l += (parseInt(input.value) > 0 ? "e5934f" : "81c4c0");
+            else l += (parseInt(input.value) > 0 ? "8481B5" : "D65A77");
+            l += `","italic":false},{"text":"${field.name.includes("crit") || field.name.includes("chance") ? "%" : ""} ${capitalise(field.name)} ${field.symbol}","color":"#${field.colour}","italic":false}]'`;
+            loreList.push(l);
         }
     })
-    gc += loreList.join(",");
+    gc += loreList.join(`,'{"text":" "}',`) + (loreList.length ? `,'{"text":" "}',` : ""); // don't even ask
+    lorelist = [];
+    skillNames.forEach(field => {
+        var input = document.querySelector("input#" + camelCase(field.name));
+        console.log(input);
+        var l = `'[{"text":"`;
+        if (parseInt(input.value) != 0) {
+            l += (parseInt(input.value) > 0 ? "+" : "") + parseInt(input.value).toString()
+            l += `","color":"#`;
+            l += (parseInt(input.value) > 0 ? "8481B5" : "D65A77");
+            l += `","italic":false},{"text":"% ${capitalise(field.name)} XP Bonus","color":"#${field.colour}","italic":false}]'`;
+            loreList.push(l);
+        }
+    })
+    gc += loreList.join(`,'{"text":" "}',`) //+ `${gc.charAt([gc.length-1]) === ","? "" : ","}'{"text":" "}',`;  // god awful fix for double commas please end my suffering
 
+    var abilityCache = "";
+    if (abil1Selector.value != "unset") {
+        abilityCache += `'[{"text":"${capitalise(abil1Selector.value)} Ability - ","color":"#${itemNameColour.value}","italic":false},{"text":"${document.querySelector("input#abil1Name").value.toUpperCase()}","color":"#${abil1NameColourHex.value}"}]','{"text":" "}',`;
+        var desc = document.querySelector("textarea#abil1Description").value.split(" ");
+        var descL = [];
+        var descList = []
+        for (var i = 0; i < desc.length; i++) {
+            descL.push(desc[i]);
+            if (descL.length == 5 || i === desc.length - 1) descList.push(`'{"text":"${descL.join(" ")}","color":"dark_gray","italic":false}'`); descL = [];
+        }
+        abilityCache += descList.join(`,'{"text":" "}',`);
+    }
+    if (abil2Selector.value != "unset") {
+        abilityCache += `,'{"text":" "}','[{"text":"${capitalise(abil2Selector.value)} Ability - ","color":"#${itemNameColour.value}","italic":false}','{"text":"${document.querySelector("input#abil2Name").value.toUpperCase()}","color":"#${abil2NameColourHex.value}"}]','{"text":" "}',`;
+        var desc = document.querySelector("textarea#abil2Description").value.split(" ");
+        var descL = [];
+        var descList = []
+        for (var i = 0; i < desc.length; i++) {
+            descL.push(desc[i]);
+            if (descL.length == 5 || i === desc.length - 1) descList.push(`'{"text":"${descL.join(" ")}","color":"dark_gray","italic":false}'`); descL = [];
+        }
+        abilityCache += descList.join(`,'{"text":" "}',`);
+    }
+
+    gc += abilityCache+"]";
+
+    gc += "}}";
     return gc
 }
 
