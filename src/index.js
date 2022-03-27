@@ -16,15 +16,15 @@ function startup() {
         new Field("immunity", "C5DB6B", "☠", 1), new Field("luck", "4FDB7E", "❉", 1)
     ]
     let skillNames = [
-        new Field("woodwork", "FFFFFF", "x", 1), new Field("mining", "FFFFFF", "x", 1),
-        new Field("foraging", "FFFFFF", "x", 1), new Field("agriculture", "FFFFFF", "x", 1),
-        new Field("fishing", "FFFFFF", "x", 1), new Field("taming", "FFFFFF", "x"),
-        new Field("combat", "FFFFFF", "x", 1), new Field("slaying", "FFFFFF", "x", 1),
-        new Field("necromancy", "FFFFFF", "x", 1), new Field("gliding", "FFFFFF", "x", 1),
-        new Field("crafting", "FFFFFF", "x", 1), new Field("climbing", "FFFFFF", "x", 1),
-        new Field("riding", "FFFFFF", "x", 1), new Field("swimming", "FFFFFF", "x", 1), new Field("running", "FFFFFF", "x", 1),
-        new Field("hunting", "FFFFFF", "x", 1), new Field("etomology", "FFFFFF", "x", 1),
-        new Field("husbandry", "FFFFFF", "x", 1),
+        new Field("woodwork", "B07B5D", "", 100), new Field("mining", "C4B3A7", "", 100),
+        new Field("foraging", "9BC22F", "", 100), new Field("agriculture", "7FB874", "", 100),
+        new Field("fishing", "7CC9BA", "", 100), new Field("beast taming", "E39191", "", 100),
+        new Field("combat", "738CD1", "", 100), new Field("slaying", "FFFFFF", "", 100),
+        new Field("necromancy", "886599", "", 100), new Field("gliding", "9FA2D6", "", 100),
+        new Field("crafting", "D6A87A", "", 100), new Field("climbing", "B1E0C3", "", 100),
+        new Field("riding", "FFFFFF", "", 100), new Field("swimming", "48A9BD", "", 100), new Field("running", "FFFFFF", "", 100),
+        new Field("hunting", "FF5555", "", 100), new Field("etomology", "FFFF55", "", 100),
+        new Field("husbandry", "FF7083", "", 100), new Field("treasury", "F5A74E", "", 100),
     ]
     document.querySelector("table#tableStats").innerHTML = "";
     document.querySelector("table#tableSkills").innerHTML = "";
@@ -78,11 +78,9 @@ function startup() {
     // Event listeners for syncing colour inputs with hex code inputs
     itemType.addEventListener("input", function () {
         if (itemType.value != "armour") {
-            console.log(1);
             Array.from(document.getElementsByClassName("nonArmourSetSpecific")).forEach(elem => elem.style.display = "");
             Array.from(document.getElementsByClassName("armourSetSpecific")).forEach(elem => elem.style.display = "none");
         } else {
-            console.log(2);
             Array.from(document.getElementsByClassName("armourSetSpecific")).forEach(elem => elem.style.display = "");
             Array.from(document.getElementsByClassName("nonArmourSetSpecific")).forEach(elem => elem.style.display = "none");
             baseSetDropdown.value === "leather" ? leatherItemColourPicker.style = "" : leatherItemColourPicker.style = "display: none;"
@@ -133,6 +131,50 @@ function startup() {
     }
 }
 
+function generateGiveCode(baseItem, scale = 1) {
+    var generatedCommand = `/give @s ${baseItem}{display:{Name:'{"text":"`;
+
+    if (itemType.value != "armour") {
+        generatedCommand += (document.querySelector("input#setName").value != "" ? document.querySelector("input#setName").value : capitalise(baseItem));
+    } else {
+        if (!document.querySelector("input#setArmourName").value) generatedCommand += "Nameless";
+        generatedCommand += document.querySelector("input#setArmourName").value;
+
+        if (baseItem.includes("helmet") || baseItem.includes("cap")) generatedCommand += " Helmet";
+        else if (baseItem.includes("chestplate") || baseItem.includes("tunic")) generatedCommand += " Chestplate";
+        else if (baseItem.includes("leggings") || baseItem.includes("pants")) generatedCommand += " Leggings";
+        else if (baseItem.includes("boots")) generatedCommand += " Boots";
+        else generatedCommand += " Armour"; // edge case, hopefully this won't ever trigger
+    }
+
+    generatedCommand += `","color":"${itemNameColour.value}","italic":false}',Lore:['{"text":"`;
+
+    let raritySelector = document.querySelector("select#setRarity");
+    if (raritySelector.value == "common") generatedCommand += "Common";
+    else if (raritySelector.value == "uncommon") generatedCommand += "Uncommon";
+    else if (raritySelector.value == "rare") generatedCommand += "*Rare*";
+    else if (raritySelector.value == "epic") generatedCommand += "EPIC";
+    else if (raritySelector.value == "legendary") generatedCommand += "*LEGENDARY*";
+    else if (raritySelector.value == "mythical") generatedCommand += "MYTHICAL";
+    else generatedCommand += "⸎UNOBTAINABLE⸎"; // edge case again
+
+    generatedCommand += ` ${capitalise(itemType.value)}","color":"`;
+    if (itemType.value == "tool") generatedCommand += "";
+    else if (itemType.value == "weapon") generatedCommand += "";
+    else if (itemType.value == "armour") generatedCommand += "";
+    else if (itemType.value == "pet") generatedCommand += "";
+    else if (itemType.value == "accessory") generatedCommand += "";
+    else if (itemType.value == "food") generatedCommand += "";
+    else if (itemType.value == "plant") generatedCommand += "";
+    else if (itemType.value == "ore") generatedCommand += "";
+    else if (itemType.value == "mineral") generatedCommand += "";
+    else if (itemType.value == "fungus") generatedCommand += "";
+    else if (itemType.value == "brewing") generatedCommand += "";
+    else generatedCommand += ""; // edge case again
+
+    return generatedCommand
+}
+
 function appendStatSelectors(parent, fields, mode) {
     if (mode != "stat" && mode != "skill") { return null; }
     let frag = new DocumentFragment();
@@ -157,8 +199,14 @@ function appendStatSelectors(parent, fields, mode) {
     parent.appendChild(frag);
 }
 
+function hexToDec(hexString) {
+    var x = parseInt(hexString, 16);
+    return x ? x : 0;
+}
+
 function capitalise(input) {
-    const words = input.split(" ");
+    var words;
+    input.includes("_") && !(input.includes(" ")) ? words = input.split("_") : words = input.split(" ");
 
     for (let i = 0; i < words.length; i++) {
         words[i] = words[i][0].toUpperCase() + words[i].substr(1);
