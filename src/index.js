@@ -1,8 +1,6 @@
 window.addEventListener("load", startup, false)
 
 // Create all the fields for stats and skills
-document.querySelector("table#tableStats").innerHTML = "";
-document.querySelector("table#tableSkills").innerHTML = "";
 appendStatSelectors(document.querySelector("table#tableStats"), statNames, "stat");
 appendStatSelectors(document.querySelector("table#tableSkills"), skillNames, "skill");
 
@@ -100,6 +98,9 @@ function startup() {
     generateBtn.onclick = function () {
         outputBG.style = "display: block;";
         console.log(generateGiveCode(document.querySelector("input#setName").value, 1));
+        if (itemType.value != "armour") {
+            appendOutputCells(document.querySelector("tr#outputHere"),[generateGiveCode(document.querySelector("input#setName").value, 1)]);
+        }
     }
 
     // closes the modal when clicking elsewhere
@@ -120,9 +121,9 @@ function generateGiveCode(baseItem, scale = 1) {
         if (!document.querySelector("input#setArmourName").value) nameSect += "Nameless";
         nameSect += document.querySelector("input#setArmourName").value;
 
-        if (baseItem.includes("helmet") || baseItem.includes("cap")) nameSect += " Helmet";
-        else if (baseItem.includes("chestplate") || baseItem.includes("tunic")) nameSect += " Chest Piece";
-        else if (baseItem.includes("leggings") || baseItem.includes("pants")) nameSect += " Leg Piece";
+        if (baseItem.includes("helmet")) nameSect += " Helmet";
+        else if (baseItem.includes("chestplate")) nameSect += " Chest Piece";
+        else if (baseItem.includes("leggings")) nameSect += " Leg Piece";
         else if (baseItem.includes("boots")) nameSect += " Footwear";
         else nameSect += " Armour"; // edge case, hopefully this won't ever trigger
     }
@@ -217,56 +218,8 @@ function generateGiveCode(baseItem, scale = 1) {
         abilityLore += abilityCache;
     }
 
-    gc = `${nameSect},${itemTypeSect}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]},Description:[${abilityCache.slice(2, -1)}],Stats:{${statNbtList.join(",")}},SkillBonus:{${skillNbtList.join(",")}},HideFlags:2}`;
+    var colourSect = baseItem.includes("leather_") ? `,color:${hexToDec(leatherColour.value.slice(1))}` : "";
+
+    gc = `${nameSect},${itemTypeSect}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}},Description:[${abilityCache.slice(2, -1)}],Stats:{${statNbtList.join(",")}},SkillBonus:{${skillNbtList.join(",")}},Unbreakable:1b,HideFlags:2}`;
     return gc
-}
-
-function appendStatSelectors(parent, fields, mode) {
-    if (mode != "stat" && mode != "skill") { return null; }
-    let frag = new DocumentFragment();
-    fields.forEach(field => {
-        let row = document.createElement("tr");
-        let displayName = capitalise(field.name.toLowerCase());
-        let tagName = camelCase(field.name.toLowerCase());
-        row.innerHTML = `
-<td><label for="${tagName}" style="color: #${field.colour.length === 6 ? field.colour : "ffffff"};">${displayName}${mode === "skill" ? " XP Bonus" : ""}</label></td>
-<td><p style="text-align: center; color: #${field.colour.length === 6 ? field.colour : "ffffff"}; margin: 0px;">${field.symbol}</p></td>
-<td>
-    <input type="number" id="${tagName}" name="${tagName}" value="0${field.scale > 1 ? "." + "0".repeat(Math.log10(field.scale)) : ""}" step="${field.scale != undefined ? 1 / field.scale : 1}">
-</td>
-<td>
-        <abbr
-            title="The ${mode === "stat" ? field.name : displayName}${mode === "skill" ? " Skill XP" : ""} increase this item gives. If this is an armour set, 100% of this value will be applied to the chestplate, 75% for the leggings and 50% for the boots and helmet.">?</abbr>
-</td>
-`;
-        frag.appendChild(row);
-    });
-
-    parent.appendChild(frag);
-}
-
-function hexToDec(hexString) {
-    var x = parseInt(hexString, 16);
-    return x ? x : 0;
-}
-
-function capitalise(input) {
-    var words;
-    input.includes("_") && !(input.includes(" ")) ? words = input.split("_") : words = input.split(" ");
-
-    for (let i = 0; i < words.length; i++) {
-        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-    }
-
-    return words.join(" ");
-}
-
-function camelCase(input) {
-    const words = input.split(" ");
-
-    for (let i = 0; i < words.length; i++) {
-        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-    }
-
-    return words.join("")[0].toLowerCase() + words.join("").substr(1);
 }
