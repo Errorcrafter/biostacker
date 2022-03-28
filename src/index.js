@@ -18,11 +18,11 @@ let skillNames = [
     new Field("woodwork", "B07B5D", "", 100), new Field("mining", "C4B3A7", "", 100),
     new Field("foraging", "9BC22F", "", 100), new Field("agriculture", "7FB874", "", 100),
     new Field("fishing", "7CC9BA", "", 100), new Field("beast taming", "E39191", "", 100),
-    new Field("combat", "738CD1", "", 100), new Field("slaying", "FFFFFF", "", 100),
+    new Field("combat", "738CD1", "", 100), new Field("slaying", "CCE3BA", "", 100),
     new Field("necromancy", "886599", "", 100), new Field("gliding", "9FA2D6", "", 100),
     new Field("crafting", "D6A87A", "", 100), new Field("climbing", "B1E0C3", "", 100),
-    new Field("swimming", "48A9BD", "", 100), 
-    new Field("hunting", "FF5555", "", 100), new Field("etomology", "FFFF55", "", 100),
+    new Field("swimming", "48A9BD", "", 100),
+    new Field("hunting", "FF5555", "", 100), new Field("etomology", "F3CE79", "", 100),
     new Field("husbandry", "FF7083", "", 100), new Field("treasury", "F5A74E", "", 100),
 ]
 document.querySelector("table#tableStats").innerHTML = "";
@@ -69,6 +69,7 @@ document.querySelector("textarea#abil2Description").value = "";
 
 leatherItemColourPicker.style = "display: none;";
 document.querySelector("tbody#abil2Section").style = "display: none;";
+document.querySelector("input#abilWrap").value = "5";
 
 itemType.value = "tool";
 Array.from(document.getElementsByClassName("nonArmourSetSpecific")).forEach(elem => elem.style.display = "");
@@ -134,95 +135,101 @@ function startup() {
 }
 
 function generateGiveCode(baseItem, scale = 1) {
-    var gc = `/give @p ${document.querySelector("input#setBaseItem").value}{display:{Name:'{"text":"`;
+    var gc;
+    var nameSect = `/give @p ${document.querySelector("input#setBaseItem").value}{display:{Name:'{"text":"`;
 
     if (itemType.value != "armour") {
-        gc += (document.querySelector("input#setName").value != "" ? document.querySelector("input#setName").value : capitalise(baseItem));
+        nameSect += (document.querySelector("input#setName").value != "" ? document.querySelector("input#setName").value : capitalise(baseItem));
     } else {
-        if (!document.querySelector("input#setArmourName").value) gc += "Nameless";
-        gc += document.querySelector("input#setArmourName").value;
+        if (!document.querySelector("input#setArmourName").value) nameSect += "Nameless";
+        nameSect += document.querySelector("input#setArmourName").value;
 
-        if (baseItem.includes("helmet") || baseItem.includes("cap")) gc += " Helmet";
-        else if (baseItem.includes("chestplate") || baseItem.includes("tunic")) gc += " Chest Piece";
-        else if (baseItem.includes("leggings") || baseItem.includes("pants")) gc += " Leg Piece";
-        else if (baseItem.includes("boots")) gc += " Footwear";
-        else gc += " Armour"; // edge case, hopefully this won't ever trigger
+        if (baseItem.includes("helmet") || baseItem.includes("cap")) nameSect += " Helmet";
+        else if (baseItem.includes("chestplate") || baseItem.includes("tunic")) nameSect += " Chest Piece";
+        else if (baseItem.includes("leggings") || baseItem.includes("pants")) nameSect += " Leg Piece";
+        else if (baseItem.includes("boots")) nameSect += " Footwear";
+        else nameSect += " Armour"; // edge case, hopefully this won't ever trigger
     }
+    nameSect += `"`
 
-    gc += `","color":"${itemNameColour.value}","italic":false}',Lore:['{"text":"`;
+
+    var itemTypeSect = `"color":"${itemNameColour.value}","italic":false}',Lore:['{"text":"`;
 
     let raritySelector = document.querySelector("select#setRarity");
-    if (raritySelector.value == "common") gc += "Common";
-    else if (raritySelector.value == "uncommon") gc += "Uncommon";
-    else if (raritySelector.value == "rare") gc += "*Rare*";
-    else if (raritySelector.value == "epic") gc += "EPIC";
-    else if (raritySelector.value == "legendary") gc += "*LEGENDARY*";
-    else if (raritySelector.value == "mythical") gc += "*MYTHICAL*";
-    else gc += "⸎UNOBTAINABLE⸎"; // edge case again
+    if (raritySelector.value == "common") itemTypeSect += "Common";
+    else if (raritySelector.value == "uncommon") itemTypeSect += "Uncommon";
+    else if (raritySelector.value == "rare") itemTypeSect += "*Rare*";
+    else if (raritySelector.value == "epic") itemTypeSect += "EPIC";
+    else if (raritySelector.value == "legendary") itemTypeSect += "*LEGENDARY*";
+    else if (raritySelector.value == "mythical") itemTypeSect += "*MYTHICAL*";
+    else itemTypeSect += "⸎UNOBTAINABLE⸎"; // edge case again
 
-    gc += ` ${capitalise(itemType.value)}","color":"#`;
-    if (itemType.value == "tool") gc += "FFFFFF";
-    else if (itemType.value == "accessory") gc += "FFE180";
-    else if (itemType.value == "armour") gc += "E3B36B";
-    else if (itemType.value == "brewing") gc += "D975A";
-    else if (itemType.value == "food") gc += "E38891";
-    else if (itemType.value == "fungus") gc += "E6DC9C";
-    else if (itemType.value == "pet") gc += "FFFFFF";
-    else if (itemType.value == "material") gc += "BF9191";
-    else if (itemType.value == "mineral") gc += "90CBD4";
-    else if (itemType.value == "drop") gc += "E36D6D";
-    else if (itemType.value == "ore") gc += "B2B4F0";
-    else if (itemType.value == "plant") gc += "B3D66D";
-    else if (itemType.value == "tool") gc += "B4C6DB";
-    else if (itemType.value == "weapon") gc += "7893DE";
-    else gc += "FFFFFF"; // edge case yet again
-    gc += `","italic":${raritySelector.value == "mythical".toString()}}',`;
+    itemTypeSect += ` ${capitalise(itemType.value)}","color":"#`;
+    if (itemType.value == "tool") itemTypeSect += "B4C6DB";
+    else if (itemType.value == "accessory") itemTypeSect += "FFE180";
+    else if (itemType.value == "armour") itemTypeSect += "E3B36B";
+    else if (itemType.value == "brewing") itemTypeSect += "D975A";
+    else if (itemType.value == "food") itemTypeSect += "E38891";
+    else if (itemType.value == "fungus") itemTypeSect += "E6DC9C";
+    else if (itemType.value == "pet") itemTypeSect += "FF9054";
+    else if (itemType.value == "material") itemTypeSect += "BF9191";
+    else if (itemType.value == "mineral") itemTypeSect += "90CBD4";
+    else if (itemType.value == "drop") itemTypeSect += "E36D6D";
+    else if (itemType.value == "ore") itemTypeSect += "B2B4F0";
+    else if (itemType.value == "plant") itemTypeSect += "B3D66D";
+    else if (itemType.value == "tool") itemTypeSect += "B4C6DB";
+    else if (itemType.value == "weapon") itemTypeSect += "7893DE";
+    else itemTypeSect += "FFFFFF"; // edge case yet again
+    itemTypeSect += `","italic":${raritySelector.value == "mythical".toString()}}'`;
 
     // awful section to generate the rest of the lore, TODO: make this less shit
     var statLoreList = [];
     statNames.forEach(field => {
-        var input = document.querySelector("input#" + camelCase(field.name));
+        var input = document.querySelector("input#" + camelCase(field.name)).value * scale;
         console.log(input);
         var l = `'[{"text":"`;
-        if (parseInt(input.value)) {
-            l += (parseInt(input.value) > 0 ? "+" : "") + parseInt(input.value).toString();
+        if (parseFloat(input)) {
+            l += (parseFloat(input) > 0 ? "+" : "") + parseFloat(input).toString();
             l += `${field.name.includes("crit") || field.name.includes("chance") ? "% " : " "}","color":"#`;
-            if (field.name.includes("temperature")) l += (parseInt(input.value) > 0 ? "e5934f" : "81c4c0");
-            else l += (parseInt(input.value) > 0 ? "8481B5" : "D65A77");
+            if (field.name.includes("temperature")) l += (parseFloat(input) > 0 ? "e5934f" : "81c4c0");
+            else l += (parseFloat(input) > 0 ? "8481B5" : "D65A77");
             l += `","italic":false},{"text":"${capitalise(field.name)} ${field.symbol}","color":"#${field.colour}","italic":false}]'`;
             statLoreList.push(l);
         }
     })
-    statLoreList.length > 0? gc += statLoreList.join(`,`) + (statLoreList.length ? `,'{"text":" "}',` : "") : gc;
+    var statSect = statLoreList.join(",");
     var skillLorelist = [];
     skillNames.forEach(field => {
-        var input = document.querySelector("input#" + camelCase(field.name));
+        var input = document.querySelector("input#" + camelCase(field.name)).value * scale;
         console.log(input);
         var l = `'[{"text":"`;
-        if (parseInt(input.value)) {
-            l += (parseInt(input.value) > 0 ? "+" : "") + parseInt(input.value).toString()
-            l += `","color":"#`;
-            l += (parseInt(input.value) > 0 ? "8481B5" : "D65A77");
-            l += `","italic":false},{"text":"% ${capitalise(field.name)} XP Bonus","color":"#${field.colour}","italic":false}]'`;
+        if (parseFloat(input)) {
+            l += (parseFloat(input) > 0 ? "+" : "") + parseFloat(input).toString()
+            l += `%","color":"#`;
+            l += (parseFloat(input) > 0 ? "80AD2D" : "FF5454");
+            l += `","italic":false},{"text":" ${capitalise(field.name)} XP","color":"#${field.colour}","italic":false}]'`;
             skillLorelist.push(l);
         }
     })
-    skillLorelist.length > 0? gc += skillLorelist.join(`,`) + `${gc.charAt(gc.length-1) === "," ? "" : ","}'{\"text\":\" \"}',` : gc;
+    var skillSect = skillLorelist.join(",");
 
     var abilityCache = "";
+    var abilityLore = "";
+    let wrapRegex = new RegExp(`(\\w+\\s*){1,${document.querySelector("input#abilWrap").value}}`,"g");
     if (abil1Selector.value != "unset") {
         abilityCache += `'[{"text":"${capitalise(abil1Selector.value)} Ability - ","color":"${itemNameColour.value}","italic":false},{"text":"${document.querySelector("input#abil1Name").value.toUpperCase()}","color":"${abil1NameColour.value}"}]'`;
         var desc = document.querySelector("textarea#abil1Description").value.split(" ");
-        var descList = desc.join(" ").match(/(\w+\s*){1,5}/g);
+        var descList = desc.join(" ").match(wrapRegex);
         descList.forEach(w => {
             abilityCache += `,'{"text":"${w}","color":"dark_gray","italic":false}'`;
         })
-        //abilityCache += descList.join(`,'{"text":" "}',`);
+        var abilityLore = abilityCache;
     }
 
-    gc += abilityCache+"]";
+    var closingBrackets = "]},HideFlags:2}";
 
-    gc += "}}";
+    console.log(abilityLore);
+    gc = `${nameSect},${itemTypeSect}${statSect ? "," : ""}${statSect}${skillSect? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}${closingBrackets}`;
     return gc
 }
 

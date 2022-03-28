@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="index.css">
     <title>BioStacker for BioSurvival</title>
-    
+
     <script src="src/fieldHelper.js" defer></script>
     <script src="src/index.js" defer></script>
 </head>
@@ -56,8 +56,7 @@
                             <input type="text" id="setName" name="setName">
                         </td>
                         <td>
-                            <abbr
-                                title="The custom name of this item.">?</abbr>
+                            <abbr title="The custom name of this item.">?</abbr>
                         </td>
                     </tr>
 
@@ -88,8 +87,7 @@
                             <input type="text" id="setBaseItem" name="setBaseItem">
                         </td>
                         <td>
-                            <abbr
-                                title="The item the custom item will use as a base.">?</abbr>
+                            <abbr title="The item the custom item will use as a base.">?</abbr>
                         </td>
                     </tr>
 
@@ -123,7 +121,7 @@
                     </tr>
 
                     <tr>
-                        <td><label for="setRarity">Armour Set Rarity</label></td>
+                        <td><label for="setRarity">Item Rarity</label></td>
                         <td>
                             <select id="setRarity" name="setRarity">
                                 <option value="common">Common</option>
@@ -245,6 +243,16 @@
                             </td>
                         </tr>
                     </tbody>
+
+                    <tr>
+                        <td><label for="abilWrap">Ability Description Wrap</label></td>
+                        <td>
+                            <input type="text" id="abilWrap" name="abilWrap" value="5" size="3">
+                        </td>
+                        <td><abbr
+                                title="The amount of words to allow in the descriptions before wrapping to a newline.">?</abbr>
+                        </td>
+                    </tr>
 
                 </table>
             </td>
