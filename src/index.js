@@ -134,7 +134,7 @@ function startup() {
 }
 
 function generateGiveCode(baseItem, scale = 1) {
-    var gc = `/give @s ${document.querySelector("input#setBaseItem").value}{display:{Name:'{"text":"`;
+    var gc = `/give @p ${document.querySelector("input#setBaseItem").value}{display:{Name:'{"text":"`;
 
     if (itemType.value != "armour") {
         gc += (document.querySelector("input#setName").value != "" ? document.querySelector("input#setName").value : capitalise(baseItem));
@@ -179,58 +179,45 @@ function generateGiveCode(baseItem, scale = 1) {
     gc += `","italic":${raritySelector.value == "mythical".toString()}}',`;
 
     // awful section to generate the rest of the lore, TODO: make this less shit
-    var loreList = [];
+    var statLoreList = [];
     statNames.forEach(field => {
         var input = document.querySelector("input#" + camelCase(field.name));
         console.log(input);
         var l = `'[{"text":"`;
-        if (parseInt(input.value) != 0) {
+        if (parseInt(input.value)) {
             l += (parseInt(input.value) > 0 ? "+" : "") + parseInt(input.value).toString();
-            l += `${field.name.includes("crit") || field.name.includes("chance") ? "" : " "}","color":"#`;
+            l += `${field.name.includes("crit") || field.name.includes("chance") ? "% " : " "}","color":"#`;
             if (field.name.includes("temperature")) l += (parseInt(input.value) > 0 ? "e5934f" : "81c4c0");
             else l += (parseInt(input.value) > 0 ? "8481B5" : "D65A77");
-            l += `","italic":false},{"text":"${field.name.includes("crit") || field.name.includes("chance") ? "%" : ""} ${capitalise(field.name)} ${field.symbol}","color":"#${field.colour}","italic":false}]'`;
-            loreList.push(l);
+            l += `","italic":false},{"text":"${capitalise(field.name)} ${field.symbol}","color":"#${field.colour}","italic":false}]'`;
+            statLoreList.push(l);
         }
     })
-    gc += loreList.join(`,'{"text":" "}',`) + (loreList.length ? `,'{"text":" "}',` : ""); // don't even ask
-    lorelist = [];
+    statLoreList.length > 0? gc += statLoreList.join(`,`) + (statLoreList.length ? `,'{"text":" "}',` : "") : gc;
+    var skillLorelist = [];
     skillNames.forEach(field => {
         var input = document.querySelector("input#" + camelCase(field.name));
         console.log(input);
         var l = `'[{"text":"`;
-        if (parseInt(input.value) != 0) {
+        if (parseInt(input.value)) {
             l += (parseInt(input.value) > 0 ? "+" : "") + parseInt(input.value).toString()
             l += `","color":"#`;
             l += (parseInt(input.value) > 0 ? "8481B5" : "D65A77");
             l += `","italic":false},{"text":"% ${capitalise(field.name)} XP Bonus","color":"#${field.colour}","italic":false}]'`;
-            loreList.push(l);
+            skillLorelist.push(l);
         }
     })
-    gc += loreList.join(`,'{"text":" "}',`) //+ `${gc.charAt([gc.length-1]) === ","? "" : ","}'{"text":" "}',`;  // god awful fix for double commas please end my suffering
+    skillLorelist.length > 0? gc += skillLorelist.join(`,`) + `${gc.charAt(gc.length-1) === "," ? "" : ","}'{\"text\":\" \"}',` : gc;
 
     var abilityCache = "";
     if (abil1Selector.value != "unset") {
-        abilityCache += `'[{"text":"${capitalise(abil1Selector.value)} Ability - ","color":"#${itemNameColour.value}","italic":false},{"text":"${document.querySelector("input#abil1Name").value.toUpperCase()}","color":"#${abil1NameColourHex.value}"}]','{"text":" "}',`;
+        abilityCache += `'[{"text":"${capitalise(abil1Selector.value)} Ability - ","color":"${itemNameColour.value}","italic":false},{"text":"${document.querySelector("input#abil1Name").value.toUpperCase()}","color":"${abil1NameColour.value}"}]'`;
         var desc = document.querySelector("textarea#abil1Description").value.split(" ");
-        var descL = [];
-        var descList = []
-        for (var i = 0; i < desc.length; i++) {
-            descL.push(desc[i]);
-            if (descL.length == 5 || i === desc.length - 1) descList.push(`'{"text":"${descL.join(" ")}","color":"dark_gray","italic":false}'`); descL = [];
-        }
-        abilityCache += descList.join(`,'{"text":" "}',`);
-    }
-    if (abil2Selector.value != "unset") {
-        abilityCache += `,'{"text":" "}','[{"text":"${capitalise(abil2Selector.value)} Ability - ","color":"#${itemNameColour.value}","italic":false}','{"text":"${document.querySelector("input#abil2Name").value.toUpperCase()}","color":"#${abil2NameColourHex.value}"}]','{"text":" "}',`;
-        var desc = document.querySelector("textarea#abil2Description").value.split(" ");
-        var descL = [];
-        var descList = []
-        for (var i = 0; i < desc.length; i++) {
-            descL.push(desc[i]);
-            if (descL.length == 5 || i === desc.length - 1) descList.push(`'{"text":"${descL.join(" ")}","color":"dark_gray","italic":false}'`); descL = [];
-        }
-        abilityCache += descList.join(`,'{"text":" "}',`);
+        var descList = desc.join(" ").match(/(\w+\s*){1,5}/g);
+        descList.forEach(w => {
+            abilityCache += `,'{"text":"${w}","color":"dark_gray","italic":false}'`;
+        })
+        //abilityCache += descList.join(`,'{"text":" "}',`);
     }
 
     gc += abilityCache+"]";
