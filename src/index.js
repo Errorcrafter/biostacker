@@ -1,30 +1,6 @@
 window.addEventListener("load", startup, false)
 
-
 // Create all the fields for stats and skills
-let statNames = [
-    new Field("health", "FF7088", "❤", 10), new Field("defence", "CF967E", "❈", 1),
-    new Field("intelligence", "6DBFA7", "❂", 1), new Field("soul", "B6B4C4", "❂", 1), new Field("speed", "EDC25F", "➹", 1),
-    new Field("attack damage", "C75D76", "🗡", 10), new Field("knockback resistance", "C4967B", "☗", 1),
-    new Field("strength", "C45252", "🪓", 1), new Field("fall limit", "D4C4B6", "☁", 1),
-    new Field("bow damage", "C1D7E0", "🏹", 10), new Field("base temperature", "DEAF68", "☀", 10000),
-    new Field("crit chance", "8BBBC9", "✧", 1), new Field("crit damage", "C8B0CF", "✦", 1),
-    new Field("max sanity", "BAB6A2", "☻", 1), new Field("heat limit", "DB9B76", "❄", 10000),
-    new Field("freeze limit", "ADE3DA", "❆", 10000), new Field("lung capacity", "B0CFB9", "⌛", 1),
-    new Field("ferocity", "E8864D", "☄", 1), new Field("sea creature chance", "00AAAA", "🎣", 1),
-    new Field("immunity", "C5DB6B", "☠", 1), new Field("luck", "4FDB7E", "❉", 1)
-]
-let skillNames = [
-    new Field("woodwork", "B07B5D", "", 100), new Field("mining", "C4B3A7", "", 100),
-    new Field("foraging", "9BC22F", "", 100), new Field("agriculture", "7FB874", "", 100),
-    new Field("fishing", "7CC9BA", "", 100), new Field("beast taming", "E39191", "", 100),
-    new Field("combat", "738CD1", "", 100), new Field("slaying", "CCE3BA", "", 100),
-    new Field("necromancy", "886599", "", 100), new Field("gliding", "9FA2D6", "", 100),
-    new Field("crafting", "D6A87A", "", 100), new Field("climbing", "B1E0C3", "", 100),
-    new Field("swimming", "48A9BD", "", 100),
-    new Field("hunting", "FF5555", "", 100), new Field("etomology", "F3CE79", "", 100),
-    new Field("husbandry", "FF7083", "", 100), new Field("treasury", "F5A74E", "", 100),
-]
 document.querySelector("table#tableStats").innerHTML = "";
 document.querySelector("table#tableSkills").innerHTML = "";
 appendStatSelectors(document.querySelector("table#tableStats"), statNames, "stat");
@@ -184,6 +160,7 @@ function generateGiveCode(baseItem, scale = 1) {
 
     // awful section to generate the rest of the lore, TODO: make this less shit
     var statLoreList = [];
+    var statNbtList = []
     statNames.forEach(field => {
         var input = document.querySelector("input#" + camelCase(field.name)).value * scale;
         console.log(input);
@@ -195,10 +172,12 @@ function generateGiveCode(baseItem, scale = 1) {
             else l += (parseFloat(input) > 0 ? "8481B5" : "D65A77");
             l += `","italic":false},{"text":"${capitalise(field.name)} ${field.symbol}","color":"#${field.colour}","italic":false}]'`;
             statLoreList.push(l);
+            statNbtList.push(`${field.tag}:${input*field.scale}`);
         }
     })
     var statSect = statLoreList.join(",");
     var skillLorelist = [];
+    var skillNbtList = [];
     skillNames.forEach(field => {
         var input = document.querySelector("input#" + camelCase(field.name)).value * scale;
         console.log(input);
@@ -209,13 +188,14 @@ function generateGiveCode(baseItem, scale = 1) {
             l += (parseFloat(input) > 0 ? "80AD2D" : "FF5454");
             l += `","italic":false},{"text":" ${capitalise(field.name)} XP","color":"#${field.colour}","italic":false}]'`;
             skillLorelist.push(l);
+            skillNbtList.push(`${field.tag}:${input*field.scale}`)
         }
     })
     var skillSect = skillLorelist.join(",");
 
     var abilityCache = "";
     var abilityLore = "";
-    let wrapRegex = new RegExp(`(\\w+\\s*){1,${document.querySelector("input#abilWrap").value}}`,"g");
+    let wrapRegex = new RegExp(`(\\w+\\s*){1,${parseInt(document.querySelector("input#abilWrap").value)}}`, "g");
     if (abil1Selector.value != "unset") {
         abilityCache += `'[{"text":"${capitalise(abil1Selector.value)} Ability - ","color":"${itemNameColour.value}","italic":false},{"text":"${document.querySelector("input#abil1Name").value.toUpperCase()}","color":"${abil1NameColour.value}"}]'`;
         var desc = document.querySelector("textarea#abil1Description").value.split(" ");
@@ -226,10 +206,18 @@ function generateGiveCode(baseItem, scale = 1) {
         var abilityLore = abilityCache;
     }
 
-    var closingBrackets = "]},HideFlags:2}";
+    if (abil2Selector.value != "unset") {
+        abilityCache = `,'{"text":""}',`
+        abilityCache += `'[{"text":"${capitalise(abil2Selector.value)} Ability - ","color":"${itemNameColour.value}","italic":false},{"text":"${document.querySelector("input#abil2Name").value.toUpperCase()}","color":"${abil2NameColour.value}"}]'`;
+        var desc = document.querySelector("textarea#abil2Description").value.split(" ");
+        var descList = desc.join(" ").match(wrapRegex);
+        descList.forEach(w => {
+            abilityCache += `,'{"text":"${w}","color":"dark_gray","italic":false}'`;
+        })
+        abilityLore += abilityCache;
+    }
 
-    console.log(abilityLore);
-    gc = `${nameSect},${itemTypeSect}${statSect ? "," : ""}${statSect}${skillSect? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}${closingBrackets}`;
+    gc = `${nameSect},${itemTypeSect}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]},Description:[${abilityCache.slice(2, -1)}],Stats:{${statNbtList.join(",")}},SkillBonus:{${skillNbtList.join(",")}},HideFlags:2}`;
     return gc
 }
 
