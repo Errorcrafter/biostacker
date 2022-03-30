@@ -186,7 +186,7 @@ function generateGiveCode(baseItem, scale = 1) {
         if (parseFloat(input)) {
             l += (parseFloat(input) > 0 ? "+" : "") + parseFloat(input).toString()
             l += `%","color":"#`;
-            l += (parseFloat(input) > 0 ? "80AD2D" : "FF5454");
+            l += (parseFloat(input) > 0 ? "9AD134" : "FF5454");
             l += `","italic":false},{"text":" ${capitalise(field.name)} XP","color":"#${field.colour}","italic":false}]'`;
             skillLorelist.push(l);
             skillNbtList.push(`${field.tag}:${input*field.scale}`)
