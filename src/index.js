@@ -24,6 +24,9 @@ var abil2Selector = document.querySelector("select#abil2Type");
 var abil2NameColour = document.querySelector("input#abil2NameColour");
 var abil2NameColourHex = document.querySelector("input#abil2NameColourHex");
 
+var unbreakable = document.querySelector("input#unbreakable");
+var noDmg = document.querySelector("input#noDamage");
+
 // Init defaults
 itemNameColour.value = "#ffffff";
 itemNameColourHex.value = "#ffffff";
@@ -48,6 +51,9 @@ document.querySelector("input#abilWrap").value = "5";
 itemType.value = "tool";
 Array.from(document.getElementsByClassName("nonArmourSetSpecific")).forEach(elem => elem.style.display = "");
 Array.from(document.getElementsByClassName("armourSetSpecific")).forEach(elem => elem.style.display = "none");
+
+unbreakable.checked = true;
+noDmg.checked = true;
 
 // On startup
 function startup() {
@@ -99,7 +105,13 @@ function startup() {
         outputBG.style = "display: block;";
         console.log(generateGiveCode(document.querySelector("input#setName").value, 1));
         if (itemType.value != "armour") {
-            appendOutputCells(document.querySelector("tr#outputHere"),[generateGiveCode(document.querySelector("input#setName").value, 1)]);
+            appendOutputCells(document.querySelector("tr#outputHere"), [generateGiveCode(document.querySelector("input#setBaseItem").value, 1)], ["Output"]);
+        } else {
+            appendOutputCells(document.querySelector("tr#outputHere"), [
+                generateGiveCode(baseSetDropdown.value + "_helmet", 0.5),
+                generateGiveCode(baseSetDropdown.value + "_chestplate", 1),
+                generateGiveCode(baseSetDropdown.value + "_leggings", 0.75),
+                generateGiveCode(baseSetDropdown.value + "_boots", 0.5)], ["Helmet", "Chestplate", "Leggings", "Boots"]);
         }
     }
 
@@ -113,7 +125,7 @@ function startup() {
 
 function generateGiveCode(baseItem, scale = 1) {
     var gc;
-    var nameSect = `/give @p ${document.querySelector("input#setBaseItem").value}{display:{Name:'{"text":"`;
+    var nameSect = `/give @p ${baseItem}{display:{Name:'{"text":"`;
 
     if (itemType.value != "armour") {
         nameSect += (document.querySelector("input#setName").value != "" ? document.querySelector("input#setName").value : capitalise(baseItem));
@@ -173,7 +185,7 @@ function generateGiveCode(baseItem, scale = 1) {
             else l += (parseFloat(input) > 0 ? "8481B5" : "D65A77");
             l += `","italic":false},{"text":"${capitalise(field.name)} ${field.symbol}","color":"#${field.colour}","italic":false}]'`;
             statLoreList.push(l);
-            statNbtList.push(`${field.tag}:${input*field.scale}`);
+            statNbtList.push(`${field.tag}:${input * field.scale}`);
         }
     })
     var statSect = statLoreList.join(",");
@@ -189,7 +201,7 @@ function generateGiveCode(baseItem, scale = 1) {
             l += (parseFloat(input) > 0 ? "9AD134" : "FF5454");
             l += `","italic":false},{"text":" ${capitalise(field.name)} XP","color":"#${field.colour}","italic":false}]'`;
             skillLorelist.push(l);
-            skillNbtList.push(`${field.tag}:${input*field.scale}`)
+            skillNbtList.push(`${field.tag}:${input * field.scale}`)
         }
     })
     var skillSect = skillLorelist.join(",");
@@ -220,6 +232,6 @@ function generateGiveCode(baseItem, scale = 1) {
 
     var colourSect = baseItem.includes("leather_") ? `,color:${hexToDec(leatherColour.value.slice(1))}` : "";
 
-    gc = `${nameSect},${itemTypeSect}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}},Description:[${abilityCache.slice(2, -1)}],Stats:{${statNbtList.join(",")}},SkillBonus:{${skillNbtList.join(",")}},Unbreakable:1b,HideFlags:2}`;
+    gc = `${nameSect},${itemTypeSect}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}},Description:[${abilityCache.slice(2, -1)}],Stats:{${statNbtList.join(",")}},SkillBonus:{${skillNbtList.join(",")}}${unbreakable.checked ? ",Unbreakable:1b" : ""}${noDmg.checked ? ",AttributeModifiers:[{AttributeName:\"generic.attack_damage\",Name:\"generic.attack_damage\",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]" : ""},HideFlags:6}`;
     return gc
 }

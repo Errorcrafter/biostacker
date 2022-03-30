@@ -130,3 +130,12 @@ textarea.output {
     resize: none;
     max-height: 125px;
 }
+
+table#tableOutput {
+    margin: auto;
+}
+
+h2 {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}

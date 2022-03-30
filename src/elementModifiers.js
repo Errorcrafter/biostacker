@@ -24,21 +24,30 @@ function appendStatSelectors(parent, fields, mode) {
     parent.appendChild(frag);
 }
 
-function appendOutputCells(parent, codes) {
+function appendOutputCells(parent, codes, titles) {
     parent.innerHTML = "";
 
     let frag = new DocumentFragment();
     for (let i = 0; i < codes.length; i++) {
         let cell = document.createElement("td");
+
         let ta = document.createElement("textarea");
         ta.id = `outputCell${i}`;
-        ta.style = "resize: none; height: 200px; width: auto;";
-        let copy = document.createElement("button");
-        copy.id = `outputCopy${i}`;
-        copy.onclick = `copyFromTextArea(document.querySelector("textarea#outputCell${i}"))`;
-
+        ta.style = "resize: none; height: 200px; width: 200px;";
         ta.value = codes[i];
 
+        let copy = document.createElement("button");
+        copy.id = `outputCopy${i}`;
+        copy.style = "margin-top:5px;";
+        copy.size = "6";
+        copy.innerHTML = "Copy";
+        copy.addEventListener("click", function () { copyFromTextArea(document.querySelector(`textarea#outputCell${i}`)); })
+
+        let title = document.createElement("h2");
+        title.innerHTML = titles[i];
+
+        cell.appendChild(title);
+        //cell.appendChild(document.createElement("br"));
         cell.appendChild(ta);
         cell.appendChild(document.createElement("br"));
         cell.appendChild(copy);

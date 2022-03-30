@@ -40,6 +40,7 @@ let skillNames = [
     new Field("beast taming", "E39191", "", "BeastTaming", 100),
     new Field("combat", "738CD1", "", "Combat", 100),
     new Field("fletching", "87B3C9", "", "Fletching", 100),
+    new Field("climbing", "7AAD87", "", "Climbing", 100),
     new Field("swimming", "48A9BD", "", "Swimming", 100),
     new Field("necromancy", "886599", "", "Necromancy", 100),
     new Field("gliding", "9FA2D6", "", "Gliding", 100),
@@ -50,6 +51,5 @@ let skillNames = [
     new Field("pyromancy", "FF872B", "", "Pyromancy", 100),
     new Field("hunting", "FF5555", "", "Hunting", 100),
     new Field("husbandry", "FF7083", "", "Husbandry", 100),
-    new Field("brewing", "DB87FF", "", "Brewing", 100),
-    new Field("climbing", "B1E0C3", "", "Climbing", 100),
+    new Field("brewing", "BF4677", "", "Brewing", 100),
 ]
