@@ -24,6 +24,12 @@ function appendStatSelectors(parent, fields, mode) {
     parent.appendChild(frag);
 }
 
+function petTypeBuilder(parent, fields) {
+    fields.forEach(field => {
+        parent.innerHTML += `<option value="${field.name}">${capitalise(field.name)}</option>\n`;
+    })
+}
+
 function appendOutputCells(parent, codes, titles) {
     parent.innerHTML = "";
 

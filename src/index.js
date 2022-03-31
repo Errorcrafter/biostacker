@@ -3,6 +3,7 @@ window.addEventListener("load", startup, false)
 // Create all the fields for stats and skills
 appendStatSelectors(document.querySelector("table#tableStats"), statNames, "stat");
 appendStatSelectors(document.querySelector("table#tableSkills"), skillNames, "skill");
+petTypeBuilder(document.querySelector("select#petType"), skillNames);
 
 // Init variables pointing to specific elements
 var itemType = document.querySelector("select#itemType");
@@ -51,6 +52,7 @@ document.querySelector("input#abilWrap").value = "5";
 itemType.value = "tool";
 Array.from(document.getElementsByClassName("nonArmourSetSpecific")).forEach(elem => elem.style.display = "");
 Array.from(document.getElementsByClassName("armourSetSpecific")).forEach(elem => elem.style.display = "none");
+Array.from(document.getElementsByClassName("petSpecific")).forEach(elem => elem.style.display = "none");
 
 unbreakable.checked = true;
 noDmg.checked = true;
@@ -59,13 +61,17 @@ noDmg.checked = true;
 function startup() {
     // Event listeners for syncing colour inputs with hex code inputs
     itemType.addEventListener("input", function () {
-        if (itemType.value != "armour") {
-            Array.from(document.getElementsByClassName("nonArmourSetSpecific")).forEach(elem => elem.style.display = "");
-            Array.from(document.getElementsByClassName("armourSetSpecific")).forEach(elem => elem.style.display = "none");
-        } else {
+        if (itemType.value === "armour") {
             Array.from(document.getElementsByClassName("armourSetSpecific")).forEach(elem => elem.style.display = "");
             Array.from(document.getElementsByClassName("nonArmourSetSpecific")).forEach(elem => elem.style.display = "none");
             baseSetDropdown.value === "leather" ? leatherItemColourPicker.style = "" : leatherItemColourPicker.style = "display: none;"
+            Array.from(document.getElementsByClassName("petSpecific")).forEach(elem => elem.style.display = "none");
+        } else if (itemType.value === "pet") {
+            Array.from(document.getElementsByClassName("petSpecific")).forEach(elem => elem.style.display = "");
+        } else {
+            Array.from(document.getElementsByClassName("nonArmourSetSpecific")).forEach(elem => elem.style.display = "");
+            Array.from(document.getElementsByClassName("armourSetSpecific")).forEach(elem => elem.style.display = "none");
+            Array.from(document.getElementsByClassName("petSpecific")).forEach(elem => elem.style.display = "none");
         }
     })
     itemNameColour.addEventListener("input", function () { itemNameColourHex.value = itemNameColour.value; }, false);
@@ -103,7 +109,16 @@ function startup() {
     // shows the output modal when the generate buton gets clicked
     generateBtn.onclick = function () {
         outputBG.style = "display: block;";
-        console.log(generateGiveCode(document.querySelector("input#setName").value, 1));
+
+        if (!document.querySelector("input#setName").value) {
+            document.querySelector("tr#outputHere").innerHTML = "Error: Please specify the custom item name.";
+            return;
+        }
+        if (!document.querySelector("input#setBaseItem").value) {
+            document.querySelector("tr#outputHere").innerHTML = "Error: Please specify the base item ID.";
+            return;
+        }
+
         if (itemType.value != "armour") {
             appendOutputCells(document.querySelector("tr#outputHere"), [generateGiveCode(document.querySelector("input#setBaseItem").value, 1)], ["Output"]);
         } else {
@@ -153,6 +168,10 @@ function generateGiveCode(baseItem, scale = 1) {
     else if (raritySelector.value == "mythical") itemTypeSect += "*MYTHICAL*";
     else itemTypeSect += "⸎UNOBTAINABLE⸎"; // edge case again
 
+    if (itemType.value === "pet") {
+        itemTypeSect += ` ${capitalise(document.querySelector("select#petType").value)}`;
+    }
+
     itemTypeSect += ` ${capitalise(itemType.value)}","color":"#`;
     if (itemType.value == "tool") itemTypeSect += "B4C6DB";
     else if (itemType.value == "accessory") itemTypeSect += "FFE180";
@@ -160,7 +179,7 @@ function generateGiveCode(baseItem, scale = 1) {
     else if (itemType.value == "brewing") itemTypeSect += "D975A";
     else if (itemType.value == "food") itemTypeSect += "E38891";
     else if (itemType.value == "fungus") itemTypeSect += "E6DC9C";
-    else if (itemType.value == "pet") itemTypeSect += "FF9054";
+    else if (itemType.value == "pet") itemTypeSect += "E09C57";
     else if (itemType.value == "material") itemTypeSect += "BF9191";
     else if (itemType.value == "mineral") itemTypeSect += "90CBD4";
     else if (itemType.value == "drop") itemTypeSect += "E36D6D";
@@ -232,6 +251,6 @@ function generateGiveCode(baseItem, scale = 1) {
 
     var colourSect = baseItem.includes("leather_") ? `,color:${hexToDec(leatherColour.value.slice(1))}` : "";
 
-    gc = `${nameSect},${itemTypeSect}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}},Description:[${abilityCache.slice(2, -1)}]${statNbtList.length > 0 ? ",Stats:{"+statNbtList.join(",")+"}" : ""}${skillNbtList.length > 0 ? ",SkillBonus:{"+skillNbtList.join(",")+"}" : ""}${unbreakable.checked ? ",Unbreakable:1b" : ""}${noDmg.checked ? ",AttributeModifiers:[{AttributeName:\"generic.attack_damage\",Name:\"generic.attack_damage\",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]" : ""},HideFlags:6}`;
+    gc = `${nameSect},${itemTypeSect}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}},Description:[${abilityCache.slice(2, -1)}]${statNbtList.length > 0 ? ",Stats:{" + statNbtList.join(",") + "}" : ""}${skillNbtList.length > 0 ? ",SkillBonus:{" + skillNbtList.join(",") + "}" : ""}${unbreakable.checked ? ",Unbreakable:1b" : ""}${noDmg.checked ? ",AttributeModifiers:[{AttributeName:\"generic.attack_damage\",Name:\"generic.attack_damage\",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]" : ""},HideFlags:6}`;
     return gc
 }
