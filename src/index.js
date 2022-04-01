@@ -110,12 +110,17 @@ function startup() {
     generateBtn.onclick = function () {
         outputBG.style = "display: block;";
 
-        if (!document.querySelector("input#setName").value) {
+        if (!document.querySelector("input#setName").value && itemType != "armour") {
             document.querySelector("tr#outputHere").innerHTML = "Error: Please specify the custom item name.";
             return;
         }
-        if (!document.querySelector("input#setBaseItem").value) {
+        if (!document.querySelector("input#setBaseItem").value && itemType != "armour") {
             document.querySelector("tr#outputHere").innerHTML = "Error: Please specify the base item ID.";
+            return;
+        }
+
+        if (!document.querySelector("input#setArmourName").value && itemType == "armour") {
+            document.querySelector("tr#outputHere").innerHTML = "Error: Please specify the custom armour name.";
             return;
         }
 
