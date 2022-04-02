@@ -146,7 +146,7 @@ function startup() {
 
 function generateGiveCode(baseItem, scale = 1) {
     var gc;
-    var nameSect = `/give @p ${baseItem}{display:{Name:'{"text":"`;
+    var nameSect = `give @p ${baseItem}{display:{Name:'{"text":"`;
 
     if (itemType.value != "armour") {
         nameSect += (document.querySelector("input#setName").value != "" ? document.querySelector("input#setName").value : capitalise(baseItem));
@@ -257,6 +257,6 @@ function generateGiveCode(baseItem, scale = 1) {
 
     var colourSect = baseItem.includes("leather_") ? `,color:${hexToDec(leatherColour.value.slice(1))}` : "";
 
-    gc = `${nameSect},${itemTypeSect}${abilityLore != "" ? `,'{"text":""}',` : ""}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}}${abilityLore != "" ? `,Description:[${abilityCache.slice(2, -1)}]` : ""}${statNbtList.length > 0 ? ",Stats:{" + statNbtList.join(",") + "}" : ""}${skillNbtList.length > 0 ? ",SkillBonus:{" + skillNbtList.join(",") + "}" : ""}${unbreakable.checked ? ",Unbreakable:1b" : ""}${noDmg.checked ? ",AttributeModifiers:[{AttributeName:\"generic.attack_damage\",Name:\"generic.attack_damage\",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]" : ""},HideFlags:6}`; //TODO: make this less horrible
+    gc = `${nameSect},${itemTypeSect}${abilityLore != "" ? `,'{"text":""}',` : ""}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}}${abilityLore != "" ? `,Description:[${abilityCache.slice(2, -1)}]` : ""}${statNbtList.length > 0 ? ",Stats:{" + statNbtList.join(",") + "}" : ""}${skillNbtList.length > 0 ? ",SkillBonus:{" + skillNbtList.join(",") + "}" : ""}${unbreakable.checked ? ",Unbreakable:1b" : ""}${noDmg.checked ? `,AttributeModifiers:[{AttributeName:"generic.attack_damage",Name:"generic.attack_damage",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]` : ""},HideFlags:6}`; //TODO: make this less horrible
     return gc
 }
