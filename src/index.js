@@ -27,6 +27,8 @@ var abil2NameColourHex = document.querySelector("input#abil2NameColourHex");
 
 var unbreakable = document.querySelector("input#unbreakable");
 var noDmg = document.querySelector("input#noDamage");
+var customDurabilityCheckbox = document.querySelector("input#hasCustomDurability");
+var customDurability = document.querySelector("input#customDurability");
 
 // Init defaults
 itemNameColour.value = "#ffffff";
@@ -56,6 +58,8 @@ Array.from(document.getElementsByClassName("petSpecific")).forEach(elem => elem.
 
 unbreakable.checked = true;
 noDmg.checked = true;
+customDurabilityCheckbox.checked = false;
+document.querySelector("tr.cDurabilityInput").style = "display: none";
 
 // On startup
 function startup() {
@@ -127,6 +131,7 @@ function startup() {
 
         if (itemType.value != "armour") {
             appendOutputCells(document.querySelector("tr#outputHere"), [generateGiveCode(document.querySelector("input#setBaseItem").value, 1)], ["Output"]);
+            //console.log(document.querySelector("input#setBaseItem").value);
         } else {
             appendOutputCells(document.querySelector("tr#outputHere"), [
                 generateGiveCode(baseSetDropdown.value + "_helmet", 0.5),
@@ -135,6 +140,14 @@ function startup() {
                 generateGiveCode(baseSetDropdown.value + "_boots", 0.5)], ["Helmet", "Chestplate", "Leggings", "Boots"]);
         }
     }
+
+    customDurabilityCheckbox.addEventListener("input", function () {
+        if (customDurabilityCheckbox.checked) {
+            document.querySelector("tr.cDurabilityInput").style = ""
+        } else {
+            document.querySelector("tr.cDurabilityInput").style = "display: none;"
+        }
+    })
 
     // closes the modal when clicking elsewhere
     window.onclick = function (event) {
@@ -147,6 +160,8 @@ function startup() {
 function generateGiveCode(baseItem, scale = 1) {
     var gc;
     var nameSect = `give @p ${baseItem}{display:{Name:'{"text":"`;
+    //console.log(`${nameSect} ${idAndNbtStartSect}`);
+    
 
     if (itemType.value != "armour") {
         nameSect += (document.querySelector("input#setName").value != "" ? document.querySelector("input#setName").value : capitalise(baseItem));
@@ -155,9 +170,9 @@ function generateGiveCode(baseItem, scale = 1) {
         nameSect += document.querySelector("input#setArmourName").value;
 
         if (baseItem.includes("helmet")) nameSect += " Helmet";
-        else if (baseItem.includes("chestplate")) nameSect += " Chest Piece";
-        else if (baseItem.includes("leggings")) nameSect += " Leg Piece";
-        else if (baseItem.includes("boots")) nameSect += " Footwear";
+        else if (baseItem.includes("chestplate")) nameSect += " Chestplate";
+        else if (baseItem.includes("leggings")) nameSect += " Leggings";
+        else if (baseItem.includes("boots")) nameSect += " Boots";
         else nameSect += " Armour"; // edge case, hopefully this won't ever trigger
     }
     nameSect += `"`
@@ -178,7 +193,15 @@ function generateGiveCode(baseItem, scale = 1) {
         itemTypeSect += ` ${capitalise(document.querySelector("select#petType").value)}`;
     }
 
-    itemTypeSect += ` ${capitalise(itemType.value)}","color":"#`;
+    if (itemType.value != "armour") {
+        itemTypeSect += ` ${capitalise(itemType.value)}","color":"#`;
+    } else {
+        if (baseItem.includes("helmet")) itemTypeSect += ` Helmet","color":"#`;
+        else if (baseItem.includes("chestplate")) itemTypeSect += ` Chest Piece","color":"#`;
+        else if (baseItem.includes("leggings")) itemTypeSect += ` Leg Piece","color":"#`;
+        else if (baseItem.includes("boots")) itemTypeSect += ` Footwear","color":"#`;
+    }
+
     if (itemType.value == "tool") itemTypeSect += "B4C6DB";
     else if (itemType.value == "accessory") itemTypeSect += "FFE180";
     else if (itemType.value == "armour") itemTypeSect += "E3B36B";
@@ -257,6 +280,7 @@ function generateGiveCode(baseItem, scale = 1) {
 
     var colourSect = baseItem.includes("leather_") ? `,color:${hexToDec(leatherColour.value.slice(1))}` : "";
 
-    gc = `${nameSect},${itemTypeSect}${abilityLore != "" ? `,'{"text":""}',` : ""}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}}${abilityLore != "" ? `,Description:[${abilityCache.slice(2, -1)}]` : ""}${statNbtList.length > 0 ? ",Stats:{" + statNbtList.join(",") + "}" : ""}${skillNbtList.length > 0 ? ",SkillBonus:{" + skillNbtList.join(",") + "}" : ""}${unbreakable.checked ? ",Unbreakable:1b" : ""}${noDmg.checked ? `,AttributeModifiers:[{AttributeName:"generic.attack_damage",Name:"generic.attack_damage",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]` : ""},HideFlags:6}`; //TODO: make this less horrible
+    gc = `${nameSect},${itemTypeSect}${abilityLore != "" ? `,'{"text":""}',` : ""}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}}${abilityLore != "" ? `,Description:[${abilityCache.slice(2, -1)}]` : ""}${statNbtList.length > 0 ? ",Stats:{" + statNbtList.join(",") + "}" : ""}${skillNbtList.length > 0 ? ",SkillBonus:{" + skillNbtList.join(",") + "}" : ""}${unbreakable.checked ? ",Unbreakable:1b" : ""}${noDmg.checked ? `,AttributeModifiers:[{AttributeName:"generic.attack_damage",Name:"generic.attack_damage",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]` : ""},HideFlags:6${customDurabilityCheckbox.checked ? `,MaxDurability:${customDurability.value}` : ""}}`; //TODO: make this less horrible
+    console.log(gc);
     return gc
 }

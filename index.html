@@ -153,7 +153,7 @@
                         <td>
                             <input type="checkbox" name="unbreakable" id="unbreakable">
                         </td>
-                        <td><abbr title="Whether or not this item should be unbreakable.">?</abbr>
+                        <td><abbr title="Whether or not this item should be unbreakable (vanilla).">?</abbr>
                     </tr>
 
                     <tr>
@@ -162,6 +162,24 @@
                             <input type="checkbox" name="noDamage" id="noDamage">
                         </td>
                         <td><abbr title="Whether or not this item should do 0 (vanilla) attack damage.">?</abbr>
+                    </tr>
+
+                    <tr>
+                        <td><label for="hasCustomDurability">Has Custom Durability?</label></td>
+                        <td>
+                            <input type="checkbox" name="hasCustomDurability" id="hasCustomDurability">
+                        </td>
+                        <td><abbr title="Whether or not this item should use the custom durability system.">?</abbr>
+                    </tr>
+
+                    <tr class="cDurabilityInput">
+                        <td><label for="customDurability">Max Custom Durability</label></td>
+                        <td>
+                            <input type="number" id="customDurability" name="customDurability" step="1">
+                        </td>
+                        <td>
+                            <abbr title="The max custom durability this item will have.">?</abbr>
+                        </td>
                     </tr>
 
                 </table>
