@@ -312,9 +312,13 @@ function generateNBT(baseItem, scale = 1) {
         abilityCache += `'[{"text":"${capitalise(abil1Selector.value)} Ability - ","color":"${itemNameColour.value}","italic":false},{"text":"${document.querySelector("input#abil1Name").value.toUpperCase()}","color":"${abil1NameColour.value}"}]'`;
         var desc = document.querySelector("textarea#abil1Description").value.split(" ");
         var descList = desc.join(" ").match(wrapRegex);
-        descList.forEach(w => {
-            abilityCache += `,'{"text":"${w}","color":"dark_gray","italic":false}'`;
-        })
+        try {
+            descList.forEach(w => {
+                abilityCache += `,'{"text":"${w}","color":"dark_gray","italic":false}'`;
+            })
+        } catch (TypeError) {
+            abilityCache += ""; // ignored, returns empty description instead
+        }
         var abilityLore = abilityCache;
     }
 
@@ -323,9 +327,13 @@ function generateNBT(baseItem, scale = 1) {
         abilityCache += `'[{"text":"${capitalise(abil2Selector.value)} Ability - ","color":"${itemNameColour.value}","italic":false},{"text":"${document.querySelector("input#abil2Name").value.toUpperCase()}","color":"${abil2NameColour.value}"}]'`;
         var desc = document.querySelector("textarea#abil2Description").value.split(" ");
         var descList = desc.join(" ").match(wrapRegex);
-        descList.forEach(w => {
-            abilityCache += `,'{"text":"${w}","color":"dark_gray","italic":false}'`;
-        })
+        try {
+            descList.forEach(w => {
+                abilityCache += `,'{"text":"${w}","color":"dark_gray","italic":false}'`;
+            })
+        } catch (TypeError) {
+            abilityCache += ""; // ignored, returns empty description instead
+        }
         abilityLore += abilityCache;
     }
 
