@@ -29,3 +29,7 @@ function copyFromTextArea(textarea) {
     textarea.setSelectionRange(0, 99999);
     document.execCommand("copy");
 }
+
+function jsonEscape(txt) {
+    return txt.replaceAll("\\", "\\\\").replaceAll("\"","\\\"");
+}

@@ -107,11 +107,12 @@ function startup() {
     abil2NameColourHex.addEventListener("input", function () { abil2NameColour.value = abil2NameColourHex.value; }, false);
 
     // Generate modal shitfuckery
-    var generateBtn = document.querySelector("button");
+    var generateCmdBtn = document.querySelector("button#generateCmd");
+    var generateLootBtn = document.querySelector("button#generateLoot");
     var outputBG = document.querySelector("div.outputBG");
 
     // shows the output modal when the generate buton gets clicked
-    generateBtn.onclick = function () {
+    generateCmdBtn.onclick = function () {
         outputBG.style = "display: block;";
 
         if (document.querySelector("input#setName").value === "" && itemType.value != "armour") {
@@ -130,14 +131,44 @@ function startup() {
         }
 
         if (itemType.value != "armour") {
-            appendOutputCells(document.querySelector("tr#outputHere"), [generateGiveCode(document.querySelector("input#setBaseItem").value, 1)], ["Output"]);
+            appendOutputCells(document.querySelector("tr#outputHere"), [getGiveCmd(document.querySelector("input#setBaseItem").value, 1)], ["Output"]);
             //console.log(document.querySelector("input#setBaseItem").value);
         } else {
             appendOutputCells(document.querySelector("tr#outputHere"), [
-                generateGiveCode(baseSetDropdown.value + "_helmet", 0.5),
-                generateGiveCode(baseSetDropdown.value + "_chestplate", 1),
-                generateGiveCode(baseSetDropdown.value + "_leggings", 0.75),
-                generateGiveCode(baseSetDropdown.value + "_boots", 0.5)], ["Helmet", "Chestplate", "Leggings", "Boots"]);
+                getGiveCmd(baseSetDropdown.value + "_helmet", 0.5),
+                getGiveCmd(baseSetDropdown.value + "_chestplate", 1),
+                getGiveCmd(baseSetDropdown.value + "_leggings", 0.75),
+                getGiveCmd(baseSetDropdown.value + "_boots", 0.5)], ["Helmet", "Chestplate", "Leggings", "Boots"]);
+        }
+    }
+
+    generateLootBtn.onclick = function () {
+        outputBG.style = "display: block;";
+
+        if (document.querySelector("input#setName").value === "" && itemType.value != "armour") {
+            //console.log(document.querySelector("input#setName").value === ""); console.log(itemType != "armour");
+            document.querySelector("tr#outputHere").innerHTML = "Error: Please specify the custom item name.";
+            return;
+        }
+        if (document.querySelector("input#setBaseItem").value === "" && itemType.value != "armour") {
+            document.querySelector("tr#outputHere").innerHTML = "Error: Please specify the base item ID.";
+            return;
+        }
+
+        if (document.querySelector("input#setArmourName").value === "" && itemType.value == "armour") {
+            document.querySelector("tr#outputHere").innerHTML = "Error: Please specify the custom armour name.";
+            return;
+        }
+
+        if (itemType.value != "armour") {
+            appendOutputCells(document.querySelector("tr#outputHere"), [getLootTable(document.querySelector("input#setBaseItem").value, 1)], ["Output"]);
+            //console.log(document.querySelector("input#setBaseItem").value);
+        } else {
+            appendOutputCells(document.querySelector("tr#outputHere"), [
+                getLootTable(baseSetDropdown.value + "_helmet", 0.5),
+                getLootTable(baseSetDropdown.value + "_chestplate", 1),
+                getLootTable(baseSetDropdown.value + "_leggings", 0.75),
+                getLootTable(baseSetDropdown.value + "_boots", 0.5)], ["Helmet", "Chestplate", "Leggings", "Boots"]);
         }
     }
 
@@ -157,11 +188,33 @@ function startup() {
     }
 }
 
-function generateGiveCode(baseItem, scale = 1) {
+function getGiveCmd(baseItem, scale = 1) {
+    return `give @p ${baseItem}${generateNBT(baseItem, scale)}`;
+}
+
+function getLootTable(baseItem, scale = 1) {
+    return `{
+        "rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "name": "minecraft:${baseItem}"
+          }
+        ],
+        "functions": [
+          {
+            "function": "minecraft:set_nbt",
+            "tag": "${jsonEscape(generateNBT(baseItem, scale))}"
+          }
+        ]
+} `;
+}
+
+function generateNBT(baseItem, scale = 1) {
     var gc;
-    var nameSect = `give @p ${baseItem}{display:{Name:'{"text":"`;
+    var nameSect = `{display:{Name:'{"text":"`;
     //console.log(`${nameSect} ${idAndNbtStartSect}`);
-    
+
 
     if (itemType.value != "armour") {
         nameSect += (document.querySelector("input#setName").value != "" ? document.querySelector("input#setName").value : capitalise(baseItem));
@@ -191,9 +244,7 @@ function generateGiveCode(baseItem, scale = 1) {
 
     if (itemType.value === "pet") {
         itemTypeSect += ` ${capitalise(document.querySelector("select#petType").value)}`;
-    }
-
-    if (itemType.value != "armour") {
+    } else if (itemType.value != "armour") {
         itemTypeSect += ` ${capitalise(itemType.value)}","color":"#`;
     } else {
         if (baseItem.includes("helmet")) itemTypeSect += ` Helmet","color":"#`;
@@ -280,7 +331,15 @@ function generateGiveCode(baseItem, scale = 1) {
 
     var colourSect = baseItem.includes("leather_") ? `,color:${hexToDec(leatherColour.value.slice(1))}` : "";
 
-    gc = `${nameSect},${itemTypeSect}${abilityLore != "" ? `,'{"text":""}',` : ""}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}}${abilityLore != "" ? `,Description:[${abilityCache.slice(2, -1)}]` : ""}${statNbtList.length > 0 ? ",Stats:{" + statNbtList.join(",") + "}" : ""}${skillNbtList.length > 0 ? ",SkillBonus:{" + skillNbtList.join(",") + "}" : ""}${unbreakable.checked ? ",Unbreakable:1b" : ""}${noDmg.checked ? `,AttributeModifiers:[{AttributeName:"generic.attack_damage",Name:"generic.attack_damage",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]` : ""},HideFlags:6${customDurabilityCheckbox.checked ? `,MaxDurability:${customDurability.value}` : ""}}`; //TODO: make this less horrible
+    console.log(nameSect);
+    console.log(itemTypeSect);
+    console.log(statSect);
+    console.log(skillSect);
+    console.log("\n\n");
+    console.log(abilityCache);
+    console.log(abilityLore);
+
+    gc = `${nameSect},${itemTypeSect}${abilityLore != "" ? `,'{"text":""}'` : ""}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}}${abilityLore != "" ? `,Description:['${abilityCache.slice(2, -1)}']` : ""}${statNbtList.length > 0 ? ",Stats:{" + statNbtList.join(",") + "}" : ""}${skillNbtList.length > 0 ? ",SkillBonus:{" + skillNbtList.join(",") + "}" : ""}${unbreakable.checked ? ",Unbreakable:1b" : ""}${noDmg.checked ? `,AttributeModifiers:[{AttributeName:"generic.attack_damage",Name:"generic.attack_damage",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]` : ""},HideFlags:6${customDurabilityCheckbox.checked ? `,MaxDurability:${customDurability.value}` : ""}}`; //TODO: make this less horrible
     console.log(gc);
     return gc
 }
