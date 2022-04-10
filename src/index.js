@@ -194,20 +194,24 @@ function getGiveCmd(baseItem, scale = 1) {
 
 function getLootTable(baseItem, scale = 1) {
     return `{
+    "pools": [
+        {
         "rolls": 1,
         "entries": [
-          {
+            {
             "type": "minecraft:item",
             "name": "minecraft:${baseItem}"
-          }
+            }
         ],
         "functions": [
-          {
+            {
             "function": "minecraft:set_nbt",
             "tag": "${jsonEscape(generateNBT(baseItem, scale))}"
-          }
+            }
         ]
-} `;
+        }
+    ]
+}`;
 }
 
 function generateNBT(baseItem, scale = 1) {
