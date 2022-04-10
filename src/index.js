@@ -194,6 +194,7 @@ function getGiveCmd(baseItem, scale = 1) {
 
 function getLootTable(baseItem, scale = 1) {
     return `{
+    "type": "minecraft:generic",
     "pools": [
         {
         "rolls": 1,
