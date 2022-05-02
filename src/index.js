@@ -264,7 +264,7 @@ function generateNBT(baseItem, scale = 1) {
     else if (itemType.value == "brewing") itemTypeSect += "D975A";
     else if (itemType.value == "food") itemTypeSect += "E38891";
     else if (itemType.value == "fungus") itemTypeSect += "E6DC9C";
-    else if (itemType.value == "pet") itemTypeSect += "E09C57";
+    else if (itemType.value == "pet") itemTypeSect += "A2DBC6";
     else if (itemType.value == "material") itemTypeSect += "BF9191";
     else if (itemType.value == "mineral") itemTypeSect += "90CBD4";
     else if (itemType.value == "drop") itemTypeSect += "E36D6D";
@@ -352,7 +352,24 @@ function generateNBT(baseItem, scale = 1) {
     console.log(abilityCache);
     console.log(abilityLore);
 
-    gc = `${nameSect},${itemTypeSect}${abilityLore != "" ? `,'{"text":""}'` : ""}${statSect ? "," : ""}${statSect}${skillSect ? "," : ""}${skillSect}${abilityLore ? `,'{"text":""}',` : ""}${abilityLore}]${colourSect}}${abilityLore != "" ? `,Description:['${abilityCache.slice(2, -1)}']` : ""}${statNbtList.length > 0 ? ",Stats:{" + statNbtList.join(",") + "}" : ""}${skillNbtList.length > 0 ? ",SkillBonus:{" + skillNbtList.join(",") + "}" : ""}${unbreakable.checked ? ",Unbreakable:1b" : ""}${noDmg.checked ? `,AttributeModifiers:[{AttributeName:"generic.attack_damage",Name:"generic.attack_damage",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]` : ""},HideFlags:6${customDurabilityCheckbox.checked ? `,MaxDurability:${customDurability.value}` : ""}}`; //TODO: make this less horrible
+    gc = (
+      nameSect + "," +
+      itemTypeSect +
+      (!abilityLore ? `,'{"text":""}'` : "") +
+      (statSect ? "," : "") + statSect +
+      (skillSect ? "," : "") + skillSect +
+      (abilityLore ? `,'{"text":""}',` : "") + abilityLore + "]" + 
+      colourSect + "]" +
+      (!abilityLore ?  `,Description:['${abilityCache.slice(2, -1)}']` : "") +
+      (statNbtList.length > 0 ? ",Stats:{" + statNbtList.join(",") + "}" : "") + 
+      (skillNbtList.length > 0 ? ",SkillBonus:{" + skillNbtList.join(",") + "}" : "") +
+      (customDurabilityCheckbox.checked ? `,MaxDurability:${customDurability.value}` : "") +
+      (itemType.value = "pet" ? ",Pet:1b,PetXP:0,PetType:{"+capitalise(document.querySelector("select#petType").value)+":1b},PetName:[]" : "") +
+      (unbreakable.checked ? ",Unbreakable:1b" : "") +
+      (noDmg.checked ? `,AttributeModifiers:[{AttributeName:"generic.attack_damage",Name:"generic.attack_damage",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]` : "") +
+      ",HideFlags:6}"
+    )
+
     console.log(gc);
     return gc
 }
