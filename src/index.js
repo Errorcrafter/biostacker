@@ -258,6 +258,7 @@ function generateNBT(baseItem, scale = 1) {
         else if (baseItem.includes("boots")) itemTypeSect += ` Footwear","color":"#`;
     }
 
+    // item type colours
     if (itemType.value == "tool") itemTypeSect += "B4C6DB";
     else if (itemType.value == "accessory") itemTypeSect += "FFE180";
     else if (itemType.value == "armour") itemTypeSect += "E3B36B";
@@ -274,6 +275,10 @@ function generateNBT(baseItem, scale = 1) {
     else if (itemType.value == "weapon") itemTypeSect += "7893DE";
     else itemTypeSect += "FFFFFF"; // edge case yet again
     itemTypeSect += `","italic":${raritySelector.value == "mythical".toString()}}'`;
+
+    if (customDurabilityCheckbox.checked) {
+        itemTypeSect += `,'{"text":"Max Durability: ","color":"#BF8680","italic":"false"},{"text":"${customDurability.value.toString()}","E0CDBF","italic":"false"}'`;
+    }
 
     // awful section to generate the rest of the lore, TODO: make this less shit
     var statLoreList = [];
@@ -319,7 +324,7 @@ function generateNBT(baseItem, scale = 1) {
         var descList = desc.join(" ").match(wrapRegex);
         try {
             descList.forEach(w => {
-                abilityCache += `,'{"text":"${w}","color":"dark_gray","italic":false}'`;
+                abilityCache += `,'{"text":"${w}","color":"gray","italic":false}'`;
             })
         } catch (TypeError) {
             abilityCache += ""; // ignored, returns empty description instead
@@ -334,7 +339,7 @@ function generateNBT(baseItem, scale = 1) {
         var descList = desc.join(" ").match(wrapRegex);
         try {
             descList.forEach(w => {
-                abilityCache += `,'{"text":"${w}","color":"dark_gray","italic":false}'`;
+                abilityCache += `,'{"text":"${w}","color":"gray","italic":false}'`;
             })
         } catch (TypeError) {
             abilityCache += ""; // ignored, returns empty description instead
@@ -355,7 +360,7 @@ function generateNBT(baseItem, scale = 1) {
     gc = (
       nameSect + "," +
       itemTypeSect +
-      (!abilityLore ? `,'{"text":""}'` : "") +
+      (!abilityLore || customDurabilityCheckbox.checked ? `,'{"text":""}'` : "") +
       (statSect ? "," : "") + statSect +
       (skillSect ? "," : "") + skillSect +
       (abilityLore ? `,'{"text":""}',` : "") + abilityLore + "]" + 
@@ -367,7 +372,7 @@ function generateNBT(baseItem, scale = 1) {
       (itemType.value = "pet" ? ",Pet:1b,PetXP:0,PetType:{"+capitalise(document.querySelector("select#petType").value)+":1b},PetName:[]" : "") +
       (unbreakable.checked ? ",Unbreakable:1b" : "") +
       (noDmg.checked ? `,AttributeModifiers:[{AttributeName:"generic.attack_damage",Name:"generic.attack_damage",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]` : "") +
-      ",HideFlags:6}"
+      `,HideFlags:${baseItem.includes("leather_") ? "70" : "6"}}`
     )
 
     console.log(gc);
