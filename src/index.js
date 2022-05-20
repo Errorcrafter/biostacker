@@ -217,9 +217,11 @@ function getLootTable(baseItem, scale = 1) {
 
 function generateNBT(baseItem, scale = 1) {
     var gc;
-    var nameSect = `{display:{Name:'{"text":"`;
-    //console.log(`${nameSect} ${idAndNbtStartSect}`);
+    var nameSect = `'{"text":"`;
 
+    if (document.querySelector("input#hasPetPrefix").checked) {
+        nameSect += `Pet "},{"text":"`;
+    }
 
     if (itemType.value != "armour") {
         nameSect += (document.querySelector("input#setName").value != "" ? document.querySelector("input#setName").value : capitalise(baseItem));
@@ -358,6 +360,7 @@ function generateNBT(baseItem, scale = 1) {
     console.log(abilityLore);
 
     gc = (
+      "{display:{Name:" +
       nameSect + "," +
       itemTypeSect +
       (!abilityLore || customDurabilityCheckbox.checked ? `,'{"text":""}'` : "") +
@@ -371,6 +374,7 @@ function generateNBT(baseItem, scale = 1) {
       (customDurabilityCheckbox.checked ? `,MaxDurability:${customDurability.value}` : "") +
       (itemType.value = "pet" ? ",Pet:1b,PetXP:0,PetType:{"+capitalise(document.querySelector("select#petType").value)+":1b},PetName:[]" : "") +
       (unbreakable.checked ? ",Unbreakable:1b" : "") +
+      (document.querySelector("select#itemType").value == "pet" ? `,PetType:{"name":"${document.querySelector("input#setName").value}"}` : "") +
       (noDmg.checked ? `,AttributeModifiers:[{AttributeName:"generic.attack_damage",Name:"generic.attack_damage",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]` : "") +
       `,HideFlags:${baseItem.includes("leather_") ? "70" : "6"}}`
     )
