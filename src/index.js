@@ -250,7 +250,7 @@ function generateNBT(baseItem, scale = 1) {
     else itemTypeSect += "⸎UNOBTAINABLE⸎"; // edge case again
 
     if (itemType.value === "pet") {
-        itemTypeSect += ` ${capitalise(document.querySelector("select#petType").value)}`;
+        itemTypeSect += ` ${capitalise(document.querySelector("select#petType").value)} Pet","color":"#`;
     } else if (itemType.value != "armour") {
         itemTypeSect += ` ${capitalise(itemType.value)}","color":"#`;
     } else {
@@ -372,9 +372,9 @@ function generateNBT(baseItem, scale = 1) {
       (statNbtList.length > 0 ? ",Stats:{" + statNbtList.join(",") + "}" : "") + 
       (skillNbtList.length > 0 ? ",SkillBonus:{" + skillNbtList.join(",") + "}" : "") +
       (customDurabilityCheckbox.checked ? `,MaxDurability:${customDurability.value}` : "") +
-      (itemType.value = "pet" ? ",Pet:1b,PetXP:0,PetType:{"+capitalise(document.querySelector("select#petType").value)+":1b},PetName:[]" : "") +
+      (itemType.value = "pet" ? `,Pet:1b,PetXP:0,PetType:{${capitalise(document.querySelector("select#petType").value)}:1b},PetName:{"name":"${document.querySelector("input#setName").value}"}` : "") +
       (unbreakable.checked ? ",Unbreakable:1b" : "") +
-      (document.querySelector("select#itemType").value == "pet" ? `,PetType:{"name":"${document.querySelector("input#setName").value}"}` : "") +
+      (document.querySelector("select#itemType").value == "pet" ? `` : "") +
       (noDmg.checked ? `,AttributeModifiers:[{AttributeName:"generic.attack_damage",Name:"generic.attack_damage",Amount:0,Operation:0,UUID:[I;-1632924465,-439598640,-1355487732,-1701297442]}]` : "") +
       `,HideFlags:${baseItem.includes("leather_") ? "70" : "6"}}`
     )
